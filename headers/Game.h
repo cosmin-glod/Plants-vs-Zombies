@@ -5,12 +5,14 @@
 #ifndef OOP_GAME_H
 #define OOP_GAME_H
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class Game {
     sf::RenderWindow window;
     sf::Texture tileTexture;
     sf::Sprite tile;
     std::vector<std::vector<sf::Sprite>> background;
+    std::vector<sf::RectangleShape> bar;
 
     int resources;
 
