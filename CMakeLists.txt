@@ -130,11 +130,11 @@ add_executable(${PROJECT_NAME}
     generated/src/Helper.cpp
     env_fixes.h
         headers/Game.h
-        Sources/Game.cpp
-        Sources/Game.cpp
-        Sources/Game.cpp
-        Sources/Game.cpp
-        Sources/Game.cpp
+        sources/Game.cpp
+        sources/Game.cpp
+        sources/Game.cpp
+        sources/Game.cpp
+        sources/Game.cpp
 )
 
 ###############################################################################
