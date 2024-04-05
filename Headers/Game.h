@@ -8,6 +8,11 @@
 
 class Game {
     sf::RenderWindow window;
+    sf::Texture tileTexture;
+    sf::Sprite tile;
+    std::vector<std::vector<sf::Sprite>> background;
+
+    int resources;
 
 public:
     /// Constructori / Destructori
@@ -18,6 +23,8 @@ public:
     [[nodiscard]] bool isRunning() const;
 
     /// Functii
+    void run();
+
     void closeIfNeeded();
     void update();
     void render();

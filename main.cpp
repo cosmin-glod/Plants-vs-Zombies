@@ -11,11 +11,6 @@
 int main() {
     Game game;
 
-    while (game.isRunning()) {
-        game.closeIfNeeded();
-
-        game.update();
-        game.render();
-    }
+    game.run();
     return 0;
 }
