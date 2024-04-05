@@ -2,7 +2,7 @@
 // Created by Cosmin on 04.04.2024.
 //
 
-#include "../Headers/Game.h"
+#include "../headers/Game.h"
 #include <vector>
 
 Game::Game(): window{sf::RenderWindow(sf::VideoMode(1500, 850), "Plants-vs-Zombies", sf::Style::Titlebar | sf::Style::Close)},

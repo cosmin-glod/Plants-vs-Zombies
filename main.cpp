@@ -4,7 +4,7 @@
 #include <thread>
 
 #include <SFML/Graphics.hpp>
-#include "Headers/Game.h"
+#include "headers/Game.h"
 
 #include <Helper.h>
 
