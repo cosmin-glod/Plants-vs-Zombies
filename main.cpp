@@ -2,14 +2,16 @@
 #include <array>
 #include <chrono>
 #include <thread>
+#include <fstream>
 
-#include <SFML/Graphics.hpp>
 #include "headers/Game.h"
 
-#include <Helper.h>
-
 int main() {
-    Game game;
+    int highScore;
+
+    std::ifstream fin("high_score.txt");
+    fin >> highScore;
+    Game game{highScore};
 
     game.run();
     return 0;

@@ -9,16 +9,27 @@
 
 class Game {
     sf::RenderWindow window;
+
     sf::Texture tileTexture;
-    sf::Sprite tile;
+    sf::Texture slotTexture;
+    sf::Texture bigSlotTexture;
+
+    sf::Texture shooterCat;
+
+    sf::Font font;
+    sf::Text text;
+
     std::vector<std::vector<sf::Sprite>> background;
-    std::vector<sf::RectangleShape> bar;
+    std::vector<sf::Sprite> bar;
+    std::vector<sf::Sprite> cats;
 
     int resources;
+    int score;
+    int highScore;
 
 public:
     /// Constructori / Destructori
-    Game();
+    Game(const int& highScore_);
     ~Game() = default;
 
     /// Functii accesorii

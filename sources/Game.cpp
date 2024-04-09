@@ -4,49 +4,60 @@
 
 #include "../headers/Game.h"
 #include <vector>
+#include <string>
 
-Game::Game(): window{sf::RenderWindow(sf::VideoMode(1500, 850), "Plants-vs-Zombies", sf::Style::Titlebar | sf::Style::Close)},
+Game::Game(const int& highScore_): window{sf::RenderWindow(sf::VideoMode(1500, 850), "Plants-vs-Zombies", sf::Style::Titlebar | sf::Style::Close)},
               background{std::vector<std::vector<sf::Sprite>>{5, std::vector<sf::Sprite>(10)}},
-              resources{0} {
-    /// Load tile texture
-   tileTexture.loadFromFile("textures/background-tile.png");
-   tile = sf::Sprite(tileTexture);
+              resources{0},
+              score{0},
+              highScore{highScore_}
+              {
 
-   /// Creating background matrix
+    /// Bar height = 100, Map height = 750;
+
+    /// Load tile texture
+    tileTexture.loadFromFile("textures/bg/background-tile.png");
+    sf::Sprite sprite(tileTexture);
     for (int i = 0; i < 5; ++i)
         for (int j = 0; j < 10; ++j) {
-            background[i][j] = tile;
+            background[i][j] = sprite;
             background[i][j].setPosition(sf::Vector2f(150.f * float(j), 150.f * float(i) + 100.f));
         }
 
     /// Creating the bar [3 cats, resources, state of game, score/high score]
-    sf::RectangleShape aux;
 
-    aux.setSize(sf::Vector2f (200.f, 100.f));
-    aux.setPosition(sf::Vector2f (0.f, 0.f));
-    aux.setFillColor(sf::Color::Blue);
-    bar.push_back(aux);
+    /// 3 small slots for picking the cats :))
+    slotTexture.loadFromFile("textures/bg/slot.png");
+    sprite = sf::Sprite{slotTexture};
+    for (int i = 0; i < 3; ++i) {
+        sprite.setPosition(sf::Vector2f(200.f * float(i), 0.f));
+        bar.push_back(sprite);
+    }
 
-    aux.setSize(sf::Vector2f (200.f, 100.f));
-    aux.setPosition(sf::Vector2f (200.f, 0.f));
-    aux.setFillColor(sf::Color::Yellow);
-    bar.push_back(aux);
+    /// 3 big slots for resources, state of game, score/high score
+    bigSlotTexture.loadFromFile("textures/bg/slot_long.png");
+    sprite = sf::Sprite{bigSlotTexture};
+    for (int i = 0; i < 3; ++i) {
+        sprite.setPosition(sf::Vector2f(600.f + 300.f * float(i), 0.f));
+        bar.push_back(sprite);
+    }
 
-    aux.setSize(sf::Vector2f (200.f, 100.f));
-    aux.setPosition(sf::Vector2f (400.f, 0.f));
-    aux.setFillColor(sf::Color::Red);
-    bar.push_back(aux);
+    /// Shooter Cat
+    shooterCat.loadFromFile("textures/cats-icons/shooter-cat-icon.png");
+    sprite = sf::Sprite{shooterCat};
+    sprite.setPosition(4, 4);
+    bar.push_back(sprite); /// Adding shooter cat
 
-    aux.setSize(sf::Vector2f (300.f, 100.f));
-    aux.setPosition(sf::Vector2f (600.f, 0.f));
-    aux.setFillColor(sf::Color::Magenta);
-    bar.push_back(aux);
+    /// Score/ Hight score
+    font.loadFromFile("fonts/yoster.ttf");
 
-    aux.setSize(sf::Vector2f (300.f, 100.f));
-    aux.setPosition(sf::Vector2f (1200.f, 0.f));
-    aux.setFillColor(sf::Color::White);
-    bar.push_back(aux);
-
+    text.setFont(font);
+    text.setString("Score: " + std::to_string(score) +
+                    "\nHigh score: " + std::to_string(highScore));
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(24);
+    text.setStyle(sf::Text::Bold);
+    text.setPosition(1220, 20);
 
 }
 
@@ -55,7 +66,7 @@ void Game::update() {
 }
 
 void Game::render() {
-    window.clear();
+    window.clear(sf::Color::White);
 
     /// Desenare background
     for (auto &i : background)
@@ -65,6 +76,15 @@ void Game::render() {
     /// Desenare bara de joc
     for (auto &partition : bar)
         window.draw(partition);
+
+    /// Desenare pisici
+    for (auto &cat : cats) {
+        window.draw(cat);
+    }
+
+
+    /// Desenare score / high score
+    window.draw(text);
 
     window.display();
 }
@@ -94,7 +114,7 @@ void Game::run() {
     while (isRunning()) {
         closeIfNeeded();
 
-        update();
+        //update();
         render();
     }
 }
