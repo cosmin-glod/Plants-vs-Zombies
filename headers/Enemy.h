@@ -17,7 +17,6 @@ protected:
     int speed{4};
     sf::Time spawnTime;
 public:
-    sf::RectangleShape body;
     /// Constructori / Destructori
     explicit Enemy(int);
 

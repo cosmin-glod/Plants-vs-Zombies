@@ -4,8 +4,12 @@
 
 #include "../headers/Game.h"
 
-Game::Game():
-    window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)} {
+Game::Game() :
+    window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
+    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), true))},
+    generatorCatButton{Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), true)},
+    wallCatButton{Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), true)}
+    {
 
     sf::RectangleShape tile;
     tile.setSize(sf::Vector2f (150.f, 150.f));
@@ -13,7 +17,7 @@ Game::Game():
     tile.setOutlineThickness(3.f);
     tile.setOutlineColor(sf::Color(165, 42, 42));
 
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(10);
 
     /// construire background
     for (int i = 0; i < 5; ++i) {
@@ -23,13 +27,9 @@ Game::Game():
         }
     }
 
-    /// construire butoane
-    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12)));
-    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28)));
-    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209)));
-    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 600.f, 0.f, sf::Color(209, 12, 195)));
-    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 900.f, 0.f, sf::Color(209, 15, 12)));
-    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 1200.f, 0.f, sf::Color(12, 209, 166)));
+//    Button<ShooterCat> resourcesDisplay(sf::Vector2f(300.f, 100.f), 600.f, 0.f, sf::Color(209, 12, 195), false));
+//    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 900.f, 0.f, sf::Color(209, 15, 12), false));
+//    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 1200.f, 0.f, sf::Color(12, 209, 166), false));
 
 }
 void Game::update() {
@@ -42,8 +42,14 @@ void Game::update() {
     }
 
     /// Move Enemies
-    for (auto &enemy : enemies)
-        enemy.move();
+    for (unsigned int i = 0; i < enemies.size(); ++i) {
+        enemies[i].move();
+        if (enemies[i].getShape().getPosition().x <= 0)
+            enemies.erase(enemies.begin() + i);
+    }
+
+    handleButtonDrag();
+
 }
 
 void Game::render() {
@@ -51,6 +57,11 @@ void Game::render() {
         window.draw(tile);
     for (auto &enemy : enemies)
         enemy.draw(window, sf::RenderStates::Default);
+
+    shooterCatButton.draw(window, sf::RenderStates::Default);
+    generatorCatButton.draw(window, sf::RenderStates::Default);
+    wallCatButton.draw(window, sf::RenderStates::Default);
+
     for (auto &entity : entities)
         entity->draw(window, sf::RenderStates::Default);
 
@@ -105,4 +116,17 @@ void Game::spawnEnemy() {
     // Add the enemy to your collection or perform further actions
     // For example, you might have a vector of enemies
     enemies.push_back(enemy);
+}
+
+void Game::updateMousePosition() {
+    mousePosWindow = sf::Mouse::getPosition(window);
+    mousePosView = window.mapPixelToCoords(mousePosWindow);
+//    std::cout << mousePosView.x << " " << mousePosView.y << "\n";
+}
+
+void Game::handleButtonDrag() {
+    updateMousePosition();
+    shooterCatButton.dragging(mousePosView);
+//    generatorCatButton.dragging(event, mousePosView);
+//    wallCatButton.dragging(event, mousePosView);
 }

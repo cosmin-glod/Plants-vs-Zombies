@@ -143,6 +143,8 @@ add_executable(${PROJECT_NAME}
         sources/Drawable.cpp
         headers/Button.h
         sources/Button.cpp
+        headers/Cats/ShooterCat.h
+        sources/Cats/ShooterCat.cpp
 )
 
 ###############################################################################

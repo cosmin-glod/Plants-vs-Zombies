@@ -9,6 +9,7 @@
 #include <vector>
 #include "Enemy.h"
 #include "Cat.h"
+#include "Cats/ShooterCat.h"
 #include "Button.h"
 
 class Game {
@@ -21,7 +22,14 @@ class Game {
     std::vector<Enemy> enemies;
     std::vector<Drawable*> entities;
 
+    Button<ShooterCat> shooterCatButton;
+    Button<ShooterCat> generatorCatButton;
+    Button<ShooterCat> wallCatButton;
+
     sf::Clock spawnTimer;
+
+    sf::Vector2i mousePosWindow;
+    sf::Vector2f mousePosView;
 public:
 
     /// Constructori / Destructori
@@ -36,10 +44,12 @@ public:
 
     /// Spawners
     void spawnEnemy();
+    void handleButtonDrag();
 
     void closeIfNeeded();
     void update();
     void render();
+    void updateMousePosition();
 };
 
 

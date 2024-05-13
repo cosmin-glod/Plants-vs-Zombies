@@ -6,10 +6,13 @@
 #define OOP_DRAWABLE_H
 
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 class Drawable {
+protected:
+    sf::RectangleShape body;
 public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) = 0;
+    sf::RectangleShape getShape() const;
     virtual ~Drawable() = default;
 };
 

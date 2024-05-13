@@ -3,15 +3,12 @@
 //
 
 #include "../headers/Cat.h"
-#include <iostream>
 
-Cat::Cat(int i, int j) {
-    std::cout << "Pisica instantiata\n";
-    image.setPosition(150.f * float(j), 150.f * float(i) + 100.f);
+void Cat::draw(sf::RenderTarget &target, sf::RenderStates states) {
+    target.draw(body, states);
 }
 
-void Cat::drawCat(sf::RenderWindow &window) {
-    window.draw(image);
+Cat::Cat(sf::Color color) {
+    body.setSize(sf::Vector2f (100.f, 100.f));
+    body.setFillColor(color);
 }
-
-

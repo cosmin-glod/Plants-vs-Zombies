@@ -5,16 +5,14 @@
 #ifndef OOP_CAT_H
 #define OOP_CAT_H
 #include <SFML/Graphics.hpp>
+#include "Drawable.h"
 
-class Cat {
-private:
-    static std::vector<sf::Texture> textures;
+class Cat : public Drawable {
 protected:
-    int hp;
-    sf::Sprite image;
+    int health{100};
 public:
-    Cat(int, int);
-    void drawCat(sf::RenderWindow&);
+    explicit Cat(sf::Color);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 };
 
 
