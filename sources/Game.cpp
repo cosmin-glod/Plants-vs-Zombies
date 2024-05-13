@@ -3,88 +3,56 @@
 //
 
 #include "../headers/Game.h"
-#include <vector>
-#include <string>
 
-Game::Game(const int& highScore_): window{sf::RenderWindow(sf::VideoMode(1500, 850), "Plants-vs-Zombies", sf::Style::Titlebar | sf::Style::Close)},
-              background{std::vector<std::vector<sf::Sprite>>{5, std::vector<sf::Sprite>(10)}},
-              resources{0},
-              score{0},
-              highScore{highScore_}
-              {
+Game::Game():
+    window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)} {
 
-    /// Bar height = 100, Map height = 750;
+    sf::RectangleShape tile;
+    tile.setSize(sf::Vector2f (150.f, 150.f));
+    tile.setFillColor(sf::Color(144, 238, 144));
+    tile.setOutlineThickness(3.f);
+    tile.setOutlineColor(sf::Color(165, 42, 42));
 
-    /// Load tile texture
-    tileTexture.loadFromFile("textures/bg/background-tile.png");
-    sf::Sprite sprite(tileTexture);
-    for (int i = 0; i < 5; ++i)
+    window.setFramerateLimit(60);
+
+    /// construire background
+    for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 10; ++j) {
-            background[i][j] = sprite;
-            background[i][j].setPosition(sf::Vector2f(150.f * float(j), 150.f * float(i) + 100.f));
+            tile.setPosition(float(j) * 150.f, 100.f + 150.f * float(i));
+            background_tiles.push_back(tile);
         }
-
-    /// Creating the bar [3 cats, resources, state of game, score/high score]
-
-    /// 3 small slots for picking the cats :))
-    slotTexture.loadFromFile("textures/bg/slot.png");
-    sprite = sf::Sprite{slotTexture};
-    for (int i = 0; i < 3; ++i) {
-        sprite.setPosition(sf::Vector2f(200.f * float(i), 0.f));
-        bar.push_back(sprite);
     }
 
-    /// 3 big slots for resources, state of game, score/high score
-    bigSlotTexture.loadFromFile("textures/bg/slot_long.png");
-    sprite = sf::Sprite{bigSlotTexture};
-    for (int i = 0; i < 3; ++i) {
-        sprite.setPosition(sf::Vector2f(600.f + 300.f * float(i), 0.f));
-        bar.push_back(sprite);
-    }
-
-    /// Shooter Cat
-    shooterCat.loadFromFile("textures/cats-icons/shooter-cat-icon.png");
-    sprite = sf::Sprite{shooterCat};
-    sprite.setPosition(4, 4);
-    bar.push_back(sprite); /// Adding shooter cat
-
-    /// Score/ Hight score
-    font.loadFromFile("fonts/yoster.ttf");
-
-    text.setFont(font);
-    text.setString("Score: " + std::to_string(score) +
-                    "\nHigh score: " + std::to_string(highScore));
-    text.setFillColor(sf::Color::Black);
-    text.setCharacterSize(24);
-    text.setStyle(sf::Text::Bold);
-    text.setPosition(1220, 20);
+    /// construire butoane
+    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12)));
+    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28)));
+    entities.push_back(new Button(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209)));
+    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 600.f, 0.f, sf::Color(209, 12, 195)));
+    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 900.f, 0.f, sf::Color(209, 15, 12)));
+    entities.push_back(new Button(sf::Vector2f(300.f, 100.f), 1200.f, 0.f, sf::Color(12, 209, 166)));
 
 }
-
 void Game::update() {
 
+    /// Spawn Enemies
+    sf::Time deltaTime = spawnTimer.getElapsedTime();
+    if (deltaTime >= sf::seconds(2)) {
+        spawnEnemy();
+        spawnTimer.restart();
+    }
+
+    /// Move Enemies
+    for (auto &enemy : enemies)
+        enemy.move();
 }
 
 void Game::render() {
-    window.clear(sf::Color::White);
-
-    /// Desenare background
-    for (auto &i : background)
-        for (auto &j : i)
-            window.draw(j);
-
-    /// Desenare bara de joc
-    for (auto &partition : bar)
-        window.draw(partition);
-
-    /// Desenare pisici
-    for (auto &cat : cats) {
-        window.draw(cat);
-    }
-
-
-    /// Desenare score / high score
-    window.draw(text);
+    for (auto &tile : background_tiles)
+        window.draw(tile);
+    for (auto &enemy : enemies)
+        enemy.draw(window, sf::RenderStates::Default);
+    for (auto &entity : entities)
+        entity->draw(window, sf::RenderStates::Default);
 
     window.display();
 }
@@ -114,7 +82,27 @@ void Game::run() {
     while (isRunning()) {
         closeIfNeeded();
 
-        //update();
+        update();
         render();
     }
+}
+
+void Game::setHighScore(const int &s) {
+    Game::highScore = s;
+}
+
+void Game::spawnEnemy() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    // Randomly generate a line between 0 and 4
+    std::uniform_int_distribution<> dis(0, 4);
+    int randomLine = dis(gen);
+
+    // Create and initialize the enemy with the random line
+    Enemy enemy(randomLine); // NOLINT(*-use-auto)
+
+    // Add the enemy to your collection or perform further actions
+    // For example, you might have a vector of enemies
+    enemies.push_back(enemy);
 }

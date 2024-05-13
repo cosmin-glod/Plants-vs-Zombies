@@ -5,38 +5,37 @@
 #ifndef OOP_GAME_H
 #define OOP_GAME_H
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <vector>
+#include "Enemy.h"
+#include "Cat.h"
+#include "Button.h"
 
 class Game {
     sf::RenderWindow window;
+    static int resources;
+    static int score;
+    static int highScore;
 
-    sf::Texture tileTexture;
-    sf::Texture slotTexture;
-    sf::Texture bigSlotTexture;
+    std::vector<sf::RectangleShape> background_tiles;
+    std::vector<Enemy> enemies;
+    std::vector<Drawable*> entities;
 
-    sf::Texture shooterCat;
-
-    sf::Font font;
-    sf::Text text;
-
-    std::vector<std::vector<sf::Sprite>> background;
-    std::vector<sf::Sprite> bar;
-    std::vector<sf::Sprite> cats;
-
-    int resources;
-    int score;
-    int highScore;
-
+    sf::Clock spawnTimer;
 public:
+
     /// Constructori / Destructori
-    Game(const int& highScore_);
+    Game();
     ~Game() = default;
 
-    /// Functii accesorii
     [[nodiscard]] bool isRunning() const;
+    static void setHighScore(const int&);
 
     /// Functii
     void run();
+
+    /// Spawners
+    void spawnEnemy();
 
     void closeIfNeeded();
     void update();

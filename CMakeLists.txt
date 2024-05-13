@@ -135,6 +135,14 @@ add_executable(${PROJECT_NAME}
         sources/Game.cpp
         sources/Game.cpp
         sources/Game.cpp
+        headers/Enemy.h
+        sources/Enemy.cpp
+        headers/Cat.h
+        sources/Cat.cpp
+        headers/Drawable.h
+        sources/Drawable.cpp
+        headers/Button.h
+        sources/Button.cpp
 )
 
 ###############################################################################
