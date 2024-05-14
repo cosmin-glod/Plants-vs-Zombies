@@ -11,6 +11,7 @@ class ShooterCat : public Cat {
 private:
 public:
     ShooterCat();
+    void run() override;
 };
 
 

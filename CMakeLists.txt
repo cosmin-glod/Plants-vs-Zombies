@@ -145,6 +145,11 @@ add_executable(${PROJECT_NAME}
         sources/Button.cpp
         headers/Cats/ShooterCat.h
         sources/Cats/ShooterCat.cpp
+        headers/Cats/GeneratorCat.h
+        sources/Cats/GeneratorCat.cpp
+        headers/Cats/WallCat.h
+        headers/Cats/WallCat.h
+        sources/Cats/WallCat.cpp
 )
 
 ###############################################################################

@@ -4,6 +4,8 @@
 
 #include "../../headers/Cats/ShooterCat.h"
 
-ShooterCat::ShooterCat() : Cat(sf::Color(202, 209, 12)) {
-    body.setFillColor(sf::Color(202, 209, 12));
+ShooterCat::ShooterCat() : Cat(sf::Color(202, 209, 12)) { }
+
+void ShooterCat::run() {
+
 }

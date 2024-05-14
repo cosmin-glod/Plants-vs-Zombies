@@ -7,8 +7,9 @@
 Game::Game() :
     window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
     shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), true))},
-    generatorCatButton{Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), true)},
-    wallCatButton{Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), true)}
+    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), true)},
+    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), true)},
+    grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
 
     sf::RectangleShape tile;
@@ -17,7 +18,7 @@ Game::Game() :
     tile.setOutlineThickness(3.f);
     tile.setOutlineColor(sf::Color(165, 42, 42));
 
-    window.setFramerateLimit(10);
+    window.setFramerateLimit(60);
 
     /// construire background
     for (int i = 0; i < 5; ++i) {
@@ -26,11 +27,9 @@ Game::Game() :
             background_tiles.push_back(tile);
         }
     }
-
 //    Button<ShooterCat> resourcesDisplay(sf::Vector2f(300.f, 100.f), 600.f, 0.f, sf::Color(209, 12, 195), false));
 //    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 900.f, 0.f, sf::Color(209, 15, 12), false));
 //    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 1200.f, 0.f, sf::Color(12, 209, 166), false));
-
 }
 void Game::update() {
 
@@ -53,18 +52,30 @@ void Game::update() {
 }
 
 void Game::render() {
+    /// Render background tiles
     for (auto &tile : background_tiles)
         window.draw(tile);
+
+    /// Render enemies
     for (auto &enemy : enemies)
         enemy.draw(window, sf::RenderStates::Default);
 
+    /// Render buttons
     shooterCatButton.draw(window, sf::RenderStates::Default);
     generatorCatButton.draw(window, sf::RenderStates::Default);
     wallCatButton.draw(window, sf::RenderStates::Default);
 
+    /// Render cats
+    for (auto &cat : cats) {
+        cat->draw(window, sf::RenderStates::Default);
+        //std::cout << "pisica\n";
+    }
+
+    /// Render other entities
     for (auto &entity : entities)
         entity->draw(window, sf::RenderStates::Default);
 
+    /// Display
     window.display();
 }
 
@@ -126,7 +137,8 @@ void Game::updateMousePosition() {
 
 void Game::handleButtonDrag() {
     updateMousePosition();
-    shooterCatButton.dragging(mousePosView);
-//    generatorCatButton.dragging(event, mousePosView);
-//    wallCatButton.dragging(event, mousePosView);
+
+    shooterCatButton.dragAndDrop(grid, cats, mousePosView);
+    generatorCatButton.dragAndDrop(grid, cats, mousePosView);
+    wallCatButton.dragAndDrop(grid, cats, mousePosView);
 }

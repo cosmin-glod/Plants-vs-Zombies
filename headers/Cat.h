@@ -13,6 +13,8 @@ protected:
 public:
     explicit Cat(sf::Color);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
+    void setPosition(sf::Vector2f);
+    virtual void run() = 0;
 };
 
 

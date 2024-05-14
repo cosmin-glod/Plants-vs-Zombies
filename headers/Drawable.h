@@ -7,6 +7,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
+#include <cmath>
 class Drawable {
 protected:
     sf::RectangleShape body;

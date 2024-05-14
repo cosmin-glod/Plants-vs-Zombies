@@ -10,6 +10,8 @@
 #include "Enemy.h"
 #include "Cat.h"
 #include "Cats/ShooterCat.h"
+#include "Cats/GeneratorCat.h"
+#include "Cats/WallCat.h"
 #include "Button.h"
 
 class Game {
@@ -20,11 +22,14 @@ class Game {
 
     std::vector<sf::RectangleShape> background_tiles;
     std::vector<Enemy> enemies;
+    std::vector<std::unique_ptr<Cat>> cats;
     std::vector<Drawable*> entities;
 
     Button<ShooterCat> shooterCatButton;
-    Button<ShooterCat> generatorCatButton;
-    Button<ShooterCat> wallCatButton;
+    Button<GeneratorCat> generatorCatButton;
+    Button<WallCat> wallCatButton;
+
+    std::vector<std::vector<bool>> grid;
 
     sf::Clock spawnTimer;
 
