@@ -14,7 +14,7 @@ protected:
     int line;
     int hp{100};
     int power{10};
-    int speed{4};
+    int speed{2};
     sf::Time spawnTime;
 public:
     /// Constructori / Destructori

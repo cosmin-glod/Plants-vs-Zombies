@@ -7,6 +7,6 @@
 GeneratorCat::GeneratorCat() : Cat(sf::Color(12, 209, 28)) {
 }
 
-void GeneratorCat::run() {
+void GeneratorCat::run(std::vector<Projectile> &) {
 
 }

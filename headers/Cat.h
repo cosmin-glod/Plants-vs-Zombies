@@ -6,6 +6,7 @@
 #define OOP_CAT_H
 #include <SFML/Graphics.hpp>
 #include "Drawable.h"
+#include "Projectile.h"
 
 class Cat : public Drawable {
 protected:
@@ -14,7 +15,7 @@ public:
     explicit Cat(sf::Color);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     void setPosition(sf::Vector2f);
-    virtual void run() = 0;
+    virtual void run(std::vector<Projectile>&) = 0;
 };
 
 

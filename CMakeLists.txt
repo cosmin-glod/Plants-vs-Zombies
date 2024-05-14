@@ -150,6 +150,8 @@ add_executable(${PROJECT_NAME}
         headers/Cats/WallCat.h
         headers/Cats/WallCat.h
         sources/Cats/WallCat.cpp
+        headers/Projectile.h
+        sources/Projectile.cpp
 )
 
 ###############################################################################

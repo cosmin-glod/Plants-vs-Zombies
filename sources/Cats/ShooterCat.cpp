@@ -6,6 +6,11 @@
 
 ShooterCat::ShooterCat() : Cat(sf::Color(202, 209, 12)) { }
 
-void ShooterCat::run() {
-
+void ShooterCat::run(std::vector<Projectile>& projectiles) {
+    /// Shoots once every fireSpeed seconds;
+    sf::Time deltaTime = fireClock.getElapsedTime();
+    if (deltaTime >= sf::seconds(projectilesPerSeconds)) {
+        projectiles.emplace_back(body.getPosition());
+        fireClock.restart();
+    }
 }

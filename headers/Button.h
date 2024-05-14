@@ -15,7 +15,7 @@ template<typename T>
 class Button : public Drawable{
     bool draggable;
     bool isDragging{false};
-    std::unique_ptr<Cat> entity;
+    static std::unique_ptr<Cat> entity;
 public:
     Button(sf::Vector2f, float, float, sf::Color, bool);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;

@@ -11,7 +11,7 @@ class WallCat : public Cat {
 private:
 public:
     WallCat();
-    void run() override;
+    void run(std::vector<Projectile>&) override;
 };
 
 

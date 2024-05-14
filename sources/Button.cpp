@@ -5,6 +5,9 @@
 #include "../headers/Button.h"
 
 template<typename T>
+std::unique_ptr<Cat> Button<T>::entity = nullptr;
+
+template<typename T>
 void Button<T>::draw(sf::RenderTarget &target, sf::RenderStates states) {
     target.draw(body, states);
     if (entity != nullptr)
@@ -12,7 +15,7 @@ void Button<T>::draw(sf::RenderTarget &target, sf::RenderStates states) {
 }
 
 template<typename T>
-Button<T>::Button(sf::Vector2f size, float x, float y, sf::Color color, bool draggable_) : draggable{draggable_}, entity{nullptr} {
+Button<T>::Button(sf::Vector2f size, float x, float y, sf::Color color, bool draggable_) : draggable{draggable_} {
     body.setSize(size);
     body.setPosition(x, y);
     body.setFillColor(color);
@@ -25,7 +28,7 @@ void Button<T>::dragAndDrop(std::vector<std::vector<bool>>& grid, std::vector<st
     if (draggable) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 //            std::cout << "Pressed\n";
-            if (body.getGlobalBounds().contains(mousePosition)) {
+            if (!entity && body.getGlobalBounds().contains(mousePosition)) {
                 if (!isDragging) {
                     isDragging = true;
                     entity = std::make_unique<T>();

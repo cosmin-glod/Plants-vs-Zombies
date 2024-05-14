@@ -6,12 +6,15 @@
 #define OOP_SHOOTERCAT_H
 
 #include "../Cat.h"
+#include "../Projectile.h"
 
 class ShooterCat : public Cat {
 private:
+    float projectilesPerSeconds{5};
+    sf::Clock fireClock;
 public:
     ShooterCat();
-    void run() override;
+    void run(std::vector<Projectile>&) override;
 };
 
 

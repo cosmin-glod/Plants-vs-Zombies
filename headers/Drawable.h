@@ -9,14 +9,16 @@
 #include <iostream>
 #include <memory>
 #include <cmath>
+
 class Drawable {
 protected:
     sf::RectangleShape body;
 public:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) = 0;
-    sf::RectangleShape getShape() const;
+    Drawable() = default;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
+    virtual sf::RectangleShape getShape() const;
     virtual ~Drawable() = default;
+    void setter(sf::Vector2f, sf::Vector2f, sf::Color);
 };
-
 
 #endif //OOP_DRAWABLE_H

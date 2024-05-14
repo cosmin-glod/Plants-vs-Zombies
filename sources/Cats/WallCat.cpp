@@ -6,6 +6,7 @@
 
 WallCat::WallCat() : Cat(sf::Color(12, 182, 209)) { }
 
-void WallCat::run() {
+void WallCat::run(std::vector<Projectile> &) {
 
 }
+

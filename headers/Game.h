@@ -13,6 +13,7 @@
 #include "Cats/GeneratorCat.h"
 #include "Cats/WallCat.h"
 #include "Button.h"
+#include "Projectile.h"
 
 class Game {
     sf::RenderWindow window;
@@ -23,11 +24,18 @@ class Game {
     std::vector<sf::RectangleShape> background_tiles;
     std::vector<Enemy> enemies;
     std::vector<std::unique_ptr<Cat>> cats;
-    std::vector<Drawable*> entities;
+    std::vector<Projectile> projectiles;
 
     Button<ShooterCat> shooterCatButton;
     Button<GeneratorCat> generatorCatButton;
     Button<WallCat> wallCatButton;
+
+    Drawable resourcesBox;
+    Drawable enemyCountBox;
+    Drawable scoreBox;
+
+    sf::Font font;
+    sf::Text scoreText;
 
     std::vector<std::vector<bool>> grid;
 

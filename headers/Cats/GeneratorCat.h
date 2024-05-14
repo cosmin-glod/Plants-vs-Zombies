@@ -11,7 +11,7 @@ class GeneratorCat : public Cat {
 private:
 public:
     GeneratorCat();
-    void run() override;
+    void run(std::vector<Projectile>&) override;
 };
 
 

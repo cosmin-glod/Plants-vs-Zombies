@@ -9,9 +9,11 @@ Game::Game() :
     shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), true))},
     generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), true)},
     wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), true)},
+
     grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
 
+        /// Initializare tiles
     sf::RectangleShape tile;
     tile.setSize(sf::Vector2f (150.f, 150.f));
     tile.setFillColor(sf::Color(144, 238, 144));
@@ -27,9 +29,17 @@ Game::Game() :
             background_tiles.push_back(tile);
         }
     }
-//    Button<ShooterCat> resourcesDisplay(sf::Vector2f(300.f, 100.f), 600.f, 0.f, sf::Color(209, 12, 195), false));
-//    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 900.f, 0.f, sf::Color(209, 15, 12), false));
-//    entities.push_back(new Button<ShooterCat>(sf::Vector2f(300.f, 100.f), 1200.f, 0.f, sf::Color(12, 209, 166), false));
+
+    /// construire box-uri pt scor si altele
+    resourcesBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(600.f, 0.f), sf::Color(186,85,211));
+    enemyCountBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(900.f, 0.f), sf::Color(255,196,12));
+    scoreBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(1200.f, 0.f), sf::Color(0,128,128));
+
+    /// construire text
+    font.loadFromFile("./fonts/yoster.ttf");
+    scoreText.setFont(font);
+    scoreText.setPosition(sf::Vector2f(1210.f, 10.f));
+    scoreText.setString("Score: 0\nHigh Score: " + std::to_string(highScore));
 }
 void Game::update() {
 
@@ -43,9 +53,24 @@ void Game::update() {
     /// Move Enemies
     for (unsigned int i = 0; i < enemies.size(); ++i) {
         enemies[i].move();
-        if (enemies[i].getShape().getPosition().x <= 0)
+        if (enemies[i].getShape().getPosition().x <= 0.f)
             enemies.erase(enemies.begin() + i);
     }
+
+
+    /// Spawn Projectiles
+    for (auto &cat : cats)
+        cat->run(projectiles);
+
+    /// Move Projectiles
+    for (unsigned int i = 0; i < projectiles.size(); ++i) {
+        projectiles[i].move();
+        if (projectiles[i].getShape().getPosition().x >= 1480.f)
+            projectiles.erase(projectiles.begin() + i);
+    }
+
+    /// Update Score
+    scoreText.setString("Score: " + std::to_string(score) + "\nHigh Score: " + std::to_string(highScore));
 
     handleButtonDrag();
 
@@ -65,15 +90,22 @@ void Game::render() {
     generatorCatButton.draw(window, sf::RenderStates::Default);
     wallCatButton.draw(window, sf::RenderStates::Default);
 
+    resourcesBox.draw(window, sf::RenderStates::Default);
+    enemyCountBox.draw(window, sf::RenderStates::Default);
+    scoreBox.draw(window, sf::RenderStates::Default);
+
     /// Render cats
     for (auto &cat : cats) {
         cat->draw(window, sf::RenderStates::Default);
         //std::cout << "pisica\n";
     }
 
-    /// Render other entities
-    for (auto &entity : entities)
-        entity->draw(window, sf::RenderStates::Default);
+    /// Render projectiles
+    for (auto &projectile: projectiles)
+        projectile.draw(window, sf::RenderStates::Default);
+
+    /// Render text
+    window.draw(scoreText);
 
     /// Display
     window.display();
