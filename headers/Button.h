@@ -25,9 +25,4 @@ public:
     //void spawnEntity(sf::Vector2f&);
     void dragAndDrop(std::vector<std::vector<bool>>&, std::vector<std::unique_ptr<Cat>>&, sf::Vector2f&);
 };
-
-
-template class Button<ShooterCat>;
-template class Button<GeneratorCat>;
-template class Button<WallCat>;
 #endif //OOP_BUTTON_H

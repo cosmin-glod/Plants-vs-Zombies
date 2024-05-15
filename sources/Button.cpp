@@ -70,6 +70,9 @@ void Button<T>::dragAndDrop(std::vector<std::vector<bool>>& grid, std::vector<st
     }
 }
 
+template class Button<ShooterCat>;
+template class Button<GeneratorCat>;
+template class Button<WallCat>;
 
 //void handleEvent(sf::Event event, sf::RenderWindow& window) {
 //    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
