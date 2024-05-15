@@ -22,7 +22,7 @@ void Enemy::move() {
     body.move(-float(speed), 0.f);
 }
 
-void Enemy::onCollide() {
-
-}
+//void Enemy::onCollide() {
+//
+//}
 
