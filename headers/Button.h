@@ -16,13 +16,16 @@ class Button : public Drawable{
     bool draggable;
     bool isDragging{false};
     static std::unique_ptr<Cat> entity;
+    sf::Font font;
+    sf::Text costText;
 public:
-    Button(sf::Vector2f, float, float, sf::Color, bool);
+    Button(sf::Vector2f, float, float, sf::Color, int, bool);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 
     //void spawnEntity(sf::Vector2f&);
     void dragAndDrop(std::vector<std::vector<bool>>&, std::vector<std::unique_ptr<Cat>>&, sf::Vector2f&);
 };
+
 
 template class Button<ShooterCat>;
 template class Button<GeneratorCat>;

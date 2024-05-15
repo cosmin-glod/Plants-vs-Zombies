@@ -35,7 +35,10 @@ class Game {
     Drawable scoreBox;
 
     sf::Font font;
+
     sf::Text scoreText;
+    sf::Text resourcesText;
+    sf::Text enemyCountText;
 
     std::vector<std::vector<bool>> grid;
 

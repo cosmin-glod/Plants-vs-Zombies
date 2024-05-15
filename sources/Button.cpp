@@ -10,17 +10,25 @@ std::unique_ptr<Cat> Button<T>::entity = nullptr;
 template<typename T>
 void Button<T>::draw(sf::RenderTarget &target, sf::RenderStates states) {
     target.draw(body, states);
+    target.draw(costText, states);
     if (entity != nullptr)
         target.draw(entity->getShape(), states);
 }
 
 template<typename T>
-Button<T>::Button(sf::Vector2f size, float x, float y, sf::Color color, bool draggable_) : draggable{draggable_} {
+Button<T>::Button(sf::Vector2f size, float x, float y, sf::Color color, int cost,  bool draggable_) : draggable{draggable_} {
     body.setSize(size);
     body.setPosition(x, y);
     body.setFillColor(color);
     body.setOutlineThickness(2.f);
     body.setOutlineColor(sf::Color(165, 42, 42));
+
+    font.loadFromFile("fonts/yoster.ttf");
+
+    costText.setFont(font);
+    costText.setScale(0.7f, 0.7f);
+    costText.setString(std::to_string(cost));
+    costText.setPosition(x + 75.f, y + 70.f);
 }
 
 template<typename T>

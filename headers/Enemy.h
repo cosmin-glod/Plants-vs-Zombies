@@ -23,6 +23,7 @@ public:
     void move();
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
+    void onCollide();
 };
 
 #endif //OOP_ENEMY_H

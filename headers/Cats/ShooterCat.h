@@ -10,7 +10,7 @@
 
 class ShooterCat : public Cat {
 private:
-    float projectilesPerSeconds{5};
+    float projectilesPerSeconds{3};
     sf::Clock fireClock;
 public:
     ShooterCat();

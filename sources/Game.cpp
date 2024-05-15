@@ -6,9 +6,9 @@
 
 Game::Game() :
     window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
-    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), true))},
-    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), true)},
-    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), true)},
+    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), 100,  true))},
+    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), 50, true)},
+    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), 50, true)},
 
     grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
@@ -40,6 +40,12 @@ Game::Game() :
     scoreText.setFont(font);
     scoreText.setPosition(sf::Vector2f(1210.f, 10.f));
     scoreText.setString("Score: 0\nHigh Score: " + std::to_string(highScore));
+
+    resourcesText.setFont(font);
+    resourcesText.setPosition(sf::Vector2f (630.f, 30.f));
+
+    enemyCountText.setFont(font);
+    enemyCountText.setPosition(sf::Vector2f (925.f, 30.f));
 }
 void Game::update() {
 
@@ -71,7 +77,10 @@ void Game::update() {
 
     /// Update Score
     scoreText.setString("Score: " + std::to_string(score) + "\nHigh Score: " + std::to_string(highScore));
+    resourcesText.setString("Whiskas: " + std::to_string(resources));
+    enemyCountText.setString("Enemies: " + std::to_string(enemies.size()));
 
+    /// Drag and drop
     handleButtonDrag();
 
 }
@@ -106,6 +115,8 @@ void Game::render() {
 
     /// Render text
     window.draw(scoreText);
+    window.draw(resourcesText);
+    window.draw(enemyCountText);
 
     /// Display
     window.display();

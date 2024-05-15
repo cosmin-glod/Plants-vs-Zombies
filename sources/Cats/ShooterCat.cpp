@@ -10,7 +10,7 @@ void ShooterCat::run(std::vector<Projectile>& projectiles) {
     /// Shoots once every fireSpeed seconds;
     sf::Time deltaTime = fireClock.getElapsedTime();
     if (deltaTime >= sf::seconds(projectilesPerSeconds)) {
-        projectiles.emplace_back(body.getPosition());
+        projectiles.emplace_back(body.getPosition() + sf::Vector2f (100.f, 30.f));
         fireClock.restart();
     }
 }
