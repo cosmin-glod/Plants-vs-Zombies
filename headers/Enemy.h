@@ -12,8 +12,8 @@
 class Enemy : public Drawable {
 protected:
     int line;
-    int hp{100};
-    int power{10};
+//    int hp{100};
+//    int power{10};
     int speed{2};
     sf::Time spawnTime;
 public:
@@ -23,7 +23,7 @@ public:
     void move();
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
-    void onCollide();
+//    void onCollide();
 };
 
 #endif //OOP_ENEMY_H

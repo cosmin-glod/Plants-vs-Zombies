@@ -3,7 +3,6 @@
 #include <fstream>
 
 #include "headers/Game.h"
-#include "headers/Cat.h"
 
 int Game::resources = 0;
 int Game::score = 0;

@@ -10,7 +10,7 @@
 
 class Cat : public Drawable {
 protected:
-    int health{100};
+//    int health{100};
 public:
     explicit Cat(sf::Color);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
