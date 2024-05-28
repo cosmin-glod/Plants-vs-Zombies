@@ -6,7 +6,7 @@ Dupa putin timp tot jocul va deveni un haos in care v-a trebui sa colectezi resu
 
 ## Pisicile
 Sunt 3 tipuri de pisici pe care le poti folosi pentru a-ti apara domiciliul de cutiile malefice :
-- Pisica Pistolara (~nume misterios~)
+- Pisica Pistolara (nume misterios)
 - Pisica Cersetoare (Armando)
 - Pisica Mare si Grasa (Gordo)
 
@@ -18,7 +18,7 @@ Pentru a face față acestei amenințări, pisica pistolara nu e singură. În e
 
 Cu un fel de îndemânare deosebită pentru o pisică, pistolara trăgea gheme de ață precise, lovindu-le pe cutii ca pe niște tintele mobile. Cu fiecare gheme trasă, o cutie malefică cădea.
 
-### Important!
+## Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
 Codul generat pus "ca să fie"/pe care nu îl înțelegeți se punctează doar pentru puncte bonus, doar în contextul
 în care oferă funcționalități ajutătoare și doar dacă are sens.
