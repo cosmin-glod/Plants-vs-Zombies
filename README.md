@@ -1,4 +1,22 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# CATS VS. BOXES
+
+## Descriere
+Acest joc este inspirat din jocul Plants vs. Zombies. Nu exista o modalitate de a castiga, scopul este de a obtine un scor cat mai mare.
+Dupa putin timp tot jocul va deveni un haos in care v-a trebui sa colectezi resurse, sa pui jos pisici luptatoare si sa fii atent la cutiile buclucase.
+
+## Pisicile
+Sunt 3 tipuri de pisici pe care le poti folosi pentru a-ti apara domiciliul de cutiile malefice :
+- Pisica Pistolara (~nume misterios~)
+- Pisica Cersetoare (Armando)
+- Pisica Mare si Grasa (Gordo)
+
+Într-o zi obișnuită, într-un cartier liniștit, locuia o pisica. Era o felină aparte, cu o blană moale și cu o privire fulgerătoare. Ce o făcea diferită era că avea un pistol ciudat - un mic aparat care trăgea gheme de ață.
+
+Stăpânul ei, un băiat pe nume Ion Ionut Ionel, nu știa despre abilitățile neobișnuite ale pisicii sale, dar într-o zi, când un grup de cutii de carton malefice au început să se apropie de casa lor, pisica pistolara și-a scos arma și s-a pregătit să apere teritoriul.
+
+Pentru a face față acestei amenințări, pisica pistolara nu e singură. În echipa ei se numărau prietenii săi: Armando, o pisică cersetoare care făcea rost de Whiskas pentru a le da energie pisicilor din cartier, și Gordo, o pisică mare și grăsuță care putea ține ocupate cutiile malefice mai mult timp. În cazuri extreme și nefericite, Gordo era pregătită să se sacrifice pentru binele tuturor.
+
+Cu un fel de îndemânare deosebită pentru o pisică, pistolara trăgea gheme de ață precise, lovindu-le pe cutii ca pe niște tintele mobile. Cu fiecare gheme trasă, o cutie malefică cădea.
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
