@@ -12,19 +12,19 @@
 #include "Cats/ShooterCat.h"
 #include "Cats/GeneratorCat.h"
 #include "Cats/WallCat.h"
-#include "Button.h"
 #include "Projectile.h"
+#include "Button.h"
 
 class Game {
     sf::RenderWindow window;
     static int resources;
     static int score;
     static int highScore;
+    static bool isMousePressed;
 
     std::vector<sf::RectangleShape> background_tiles;
     std::vector<Enemy> enemies;
     std::vector<std::unique_ptr<Cat>> cats;
-    std::vector<Projectile> projectiles;
 
     Button<ShooterCat> shooterCatButton;
     Button<GeneratorCat> generatorCatButton;
@@ -44,8 +44,15 @@ class Game {
 
     sf::Clock spawnTimer;
 
-    sf::Vector2i mousePosWindow;
-    sf::Vector2f mousePosView;
+    static float dificulty;
+    sf::Clock dificultyTimer;
+    static float nextDificultyIncrease;
+    static int dificultyIncreaseCounter;
+    sf::Time deltaDificultyTime;
+
+    static sf::Vector2i mousePosWindow;
+    static sf::Vector2f mousePosView;
+
 public:
 
     /// Constructori / Destructori
@@ -58,14 +65,23 @@ public:
     /// Functii
     void run();
 
+    static sf::Vector2f getMousePosition();
+
     /// Spawners
     void spawnEnemy();
-    void handleButtonDrag();
+    static void handleDragAndDrop();
+    void handleButtonRelease();
 
-    void closeIfNeeded();
+    void handleEvents();
     void update();
     void render();
     void updateMousePosition();
+
+    static void updateHighScore(std::ostream&);
+    [[maybe_unused]] static void increaseScore();
+    static void increaseResources(int);
+    static void decreaseResources(int);
+
 };
 
 

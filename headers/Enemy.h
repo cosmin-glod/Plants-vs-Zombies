@@ -12,18 +12,18 @@
 class Enemy : public Drawable {
 protected:
     int line;
-//    int hp{100};
-//    int power{10};
-    int speed{2};
+    float hp{3};
+    float speed;
     sf::Time spawnTime;
 public:
     /// Constructori / Destructori
-    explicit Enemy(int);
+    explicit Enemy(int, float);
 
     void move();
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
-//    void onCollide();
+    bool isAlive() const;
+    void gotHit();
 };
 
 #endif //OOP_ENEMY_H

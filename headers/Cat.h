@@ -11,11 +11,13 @@
 class Cat : public Drawable {
 protected:
 //    int health{100};
+//    int cost;
 public:
-    explicit Cat(sf::Color);
+    explicit Cat(int);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     void setPosition(sf::Vector2f);
-    virtual void run(std::vector<Projectile>&) = 0;
+    virtual void run() = 0;
+    //int getCost() const;
 };
 
 

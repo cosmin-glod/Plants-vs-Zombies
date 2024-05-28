@@ -17,7 +17,3 @@ Projectile::Projectile(sf::Vector2f position) {
 void Projectile::draw(sf::RenderTarget &target, sf::RenderStates states) {
     target.draw(body, states);
 }
-
-sf::CircleShape Projectile::getShape() const {
-    return body;
-}

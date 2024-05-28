@@ -4,11 +4,23 @@
 
 #include "../headers/Game.h"
 
+sf::Vector2i Game::mousePosWindow = sf::Vector2i();
+sf::Vector2f Game::mousePosView = sf::Vector2f();
+
+bool Game::isMousePressed = false;
+float Game::dificulty = 0.1f;
+float Game::nextDificultyIncrease = 15.f;
+int Game::dificultyIncreaseCounter = 5;
+
+int Game::resources = 300;
+int Game::score = 0;
+int Game::highScore = 0;
+
 Game::Game() :
     window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
-    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), 100,  true))},
-    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), 50, true)},
-    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), 50, true)},
+    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), 100))},
+    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), 50)},
+    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), 150)},
 
     grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
@@ -49,9 +61,22 @@ Game::Game() :
 }
 void Game::update() {
 
+//     Update speedMultiplier based on elapsed time
+    if (dificultyIncreaseCounter) {
+        deltaDificultyTime = dificultyTimer.getElapsedTime();
+        if (deltaDificultyTime >= sf::seconds(nextDificultyIncrease)) {
+            dificulty += 0.2f; // Adjust the increment as needed
+            dificultyIncreaseCounter--;
+
+            nextDificultyIncrease += 10.f; // After another 15 seconds, increase after 10 seconds
+
+            dificultyTimer.restart();
+        }
+    }
+
     /// Spawn Enemies
     sf::Time deltaTime = spawnTimer.getElapsedTime();
-    if (deltaTime >= sf::seconds(2)) {
+    if (deltaTime >= sf::seconds(1.5f / dificulty)) {
         spawnEnemy();
         spawnTimer.restart();
     }
@@ -63,26 +88,25 @@ void Game::update() {
             enemies.erase(enemies.begin() + i);
     }
 
-
-    /// Spawn Projectiles
+    /// Each cat does its thing
     for (auto &cat : cats)
-        cat->run(projectiles);
+        cat->run();
 
     /// Move Projectiles
-    for (unsigned int i = 0; i < projectiles.size(); ++i) {
-        projectiles[i].move();
-        if (projectiles[i].getShape().getPosition().x >= 1480.f)
-            projectiles.erase(projectiles.begin() + i);
-    }
+    ShooterCat::moveProjectiles();
+
+    /// Collect Whiskas in the handleEvents function
 
     /// Update Score
     scoreText.setString("Score: " + std::to_string(score) + "\nHigh Score: " + std::to_string(highScore));
     resourcesText.setString("Whiskas: " + std::to_string(resources));
-    enemyCountText.setString("Enemies: " + std::to_string(enemies.size()));
+    enemyCountText.setString("Speed : " + std::to_string(dificulty));
+
+    ShooterCat::checkProjectilesCollisions(enemies);
 
     /// Drag and drop
-    handleButtonDrag();
-
+    if (isMousePressed)
+        handleDragAndDrop();
 }
 
 void Game::render() {
@@ -106,17 +130,26 @@ void Game::render() {
     /// Render cats
     for (auto &cat : cats) {
         cat->draw(window, sf::RenderStates::Default);
-        //std::cout << "pisica\n";
     }
 
     /// Render projectiles
-    for (auto &projectile: projectiles)
-        projectile.draw(window, sf::RenderStates::Default);
+    ShooterCat::displayProjectiles(window, sf::RenderStates::Default);
+
+    /// Render Whiskas
+    GeneratorCat::displayWhiskas(window, sf::RenderStates::Default);
 
     /// Render text
     window.draw(scoreText);
     window.draw(resourcesText);
     window.draw(enemyCountText);
+
+    /// Render new instance of a cat
+    if (Button<ShooterCat>::isDragging())
+        Button<ShooterCat>::displayEntity(window, sf::RenderStates::Default);
+    else if (Button<GeneratorCat>::isDragging())
+        Button<GeneratorCat>::displayEntity(window, sf::RenderStates::Default);
+    else if (Button<WallCat>::isDragging())
+        Button<WallCat>::displayEntity(window, sf::RenderStates::Default);
 
     /// Display
     window.display();
@@ -126,7 +159,7 @@ bool Game::isRunning() const {
     return window.isOpen();
 }
 
-void Game::closeIfNeeded() {
+void Game::handleEvents() {
     /// Fereastra se inchide cand apasam X-ul ferestrei sau Esc
     sf::Event ev{};
     while (window.pollEvent(ev)) {
@@ -137,6 +170,19 @@ void Game::closeIfNeeded() {
             case sf::Event::KeyPressed:
                 if (ev.key.code == sf::Keyboard::Escape)
                     window.close();
+                break;
+            case sf::Event::MouseButtonPressed:
+                if (ev.mouseButton.button == sf::Mouse::Left) {
+                    isMousePressed = true;
+                    GeneratorCat::collectWhiskas();
+                }
+                break;
+            case sf::Event::MouseButtonReleased:
+                if (ev.mouseButton.button == sf::Mouse::Left) {
+                    isMousePressed = false;
+                    handleButtonRelease();
+                }
+                break;
             default:
                 break;
         }
@@ -145,7 +191,8 @@ void Game::closeIfNeeded() {
 
 void Game::run() {
     while (isRunning()) {
-        closeIfNeeded();
+        updateMousePosition();
+        handleEvents();
 
         update();
         render();
@@ -165,7 +212,7 @@ void Game::spawnEnemy() {
     int randomLine = dis(gen);
 
     // Create and initialize the enemy with the random line
-    Enemy enemy(randomLine); // NOLINT(*-use-auto)
+    Enemy enemy(randomLine, 1.5f); // NOLINT(*-use-auto)
 
     // Add the enemy to your collection or perform further actions
     // For example, you might have a vector of enemies
@@ -178,10 +225,65 @@ void Game::updateMousePosition() {
 //    std::cout << mousePosView.x << " " << mousePosView.y << "\n";
 }
 
-void Game::handleButtonDrag() {
-    updateMousePosition();
+void Game::handleDragAndDrop() {
+    ///
+    std::cout << "Mouse apasaat\n";
+    if (Button<ShooterCat>::isDragging())
+        Button<ShooterCat>::drag(mousePosView);
+    else if (Button<GeneratorCat>::isDragging())
+        Button<GeneratorCat>::drag(mousePosView);
+    else if (Button<WallCat>::isDragging())
+        Button<WallCat>::drag(mousePosView);
 
-    shooterCatButton.dragAndDrop(grid, cats, mousePosView);
-    generatorCatButton.dragAndDrop(grid, cats, mousePosView);
-    wallCatButton.dragAndDrop(grid, cats, mousePosView);
+    else { /// poate apasa butonul pentru a instantia o entitate
+        if (mousePosView.y <= 100.f) { /// trebuie sa fie apasat sus
+            if (mousePosView.x <= 200.f && resources >= 100) { /// shooter cat
+                Button<ShooterCat>::instantiate(mousePosView);
+            }
+            else if (mousePosView.x <= 400.f && resources >= 50) { /// generator cat
+                Button<GeneratorCat>::instantiate(mousePosView);
+            }
+            else if (mousePosView.x <= 600.f && resources >= 150) { /// wall cat
+                Button<WallCat>::instantiate(mousePosView);
+            }
+        }
+    }
 }
+
+void Game::handleButtonRelease() {
+    if (mousePosView.y > 100) {
+        if (Button<ShooterCat>::isDragging()) {
+            Button<ShooterCat>::place(mousePosView, cats, grid);
+            decreaseResources(100);
+        } else if (Button<GeneratorCat>::isDragging()) {
+            Button<GeneratorCat>::place(mousePosView, cats, grid);
+            decreaseResources(50);
+        } else if (Button<WallCat>::isDragging()) {
+            Button<WallCat>::place(mousePosView, cats, grid);
+            decreaseResources(150);
+        }
+    }
+}
+
+void Game::updateHighScore(std::ostream& fout) {
+    if (score > highScore)
+        highScore = score;
+    fout << highScore;
+}
+
+void Game::increaseScore() {
+    ++score;
+}
+
+void Game::increaseResources(int amount) {
+    resources += amount;
+}
+
+sf::Vector2f Game::getMousePosition() {
+    return mousePosView;
+}
+
+void Game::decreaseResources(int amount) {
+    resources -= amount;
+}
+

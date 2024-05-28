@@ -13,16 +13,21 @@
 
 template<typename T>
 class Button : public Drawable{
-    bool draggable;
-    bool isDragging{false};
     static std::unique_ptr<Cat> entity;
+    [[maybe_unused]] static bool dragging;
     sf::Font font;
+    int cost;
     sf::Text costText;
 public:
-    Button(sf::Vector2f, float, float, sf::Color, int, bool);
+    Button(sf::Vector2f, float, float, sf::Color, int);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 
-    //void spawnEntity(sf::Vector2f&);
-    void dragAndDrop(std::vector<std::vector<bool>>&, std::vector<std::unique_ptr<Cat>>&, sf::Vector2f&);
+    static void drag(sf::Vector2f&);
+    static void place(sf::Vector2f&, std::vector<std::unique_ptr<Cat>>&, std::vector<std::vector<bool>>&);
+    static void instantiate(sf::Vector2f&);
+    static bool isDragging();
+    static void displayEntity(sf::RenderTarget&, sf::RenderStates);
 };
+
+
 #endif //OOP_BUTTON_H

@@ -3,10 +3,10 @@
 //
 
 #include "../headers/Enemy.h"
+#include "../headers/Game.h"
 
 
-Enemy::Enemy(int l) {
-    line = l;
+Enemy::Enemy(int l, float speed_) : line{l}, speed{speed_}{
 
     body.setSize(sf::Vector2f (50.f, 130.f));
     body.setFillColor(sf::Color(214, 208, 100));
@@ -22,7 +22,12 @@ void Enemy::move() {
     body.move(-float(speed), 0.f);
 }
 
-//void Enemy::onCollide() {
-//
-//}
+bool Enemy::isAlive() const {
+    return hp > 0;
+}
+
+void Enemy::gotHit() {
+    --hp;
+    Game::increaseScore();
+}
 

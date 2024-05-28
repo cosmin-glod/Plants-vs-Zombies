@@ -4,9 +4,10 @@
 
 #include "../../headers/Cats/WallCat.h"
 
-WallCat::WallCat() : Cat(sf::Color(12, 182, 209)) { }
-
-void WallCat::run(std::vector<Projectile> &) {
-
+WallCat::WallCat() : Cat(50) {
+    body.setFillColor(color);
 }
 
+void WallCat::run() {
+
+}

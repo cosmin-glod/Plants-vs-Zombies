@@ -152,6 +152,10 @@ add_executable(${PROJECT_NAME}
         sources/Cats/WallCat.cpp
         headers/Projectile.h
         sources/Projectile.cpp
+        headers/CircleShape.h
+        sources/CircleShape.cpp
+        headers/Whiskas.h
+        sources/Whiskas.cpp
 )
 
 ###############################################################################

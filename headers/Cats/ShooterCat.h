@@ -7,14 +7,20 @@
 
 #include "../Cat.h"
 #include "../Projectile.h"
+#include "../Enemy.h"
 
 class ShooterCat : public Cat {
 private:
-    float projectilesPerSeconds{3};
+    sf::Color color{sf::Color(202, 209, 12)};
+    float projectilesPerSeconds{1.5};
     sf::Clock fireClock;
+    static std::vector<Projectile> projectiles;
 public:
     ShooterCat();
-    void run(std::vector<Projectile>&) override;
+    void run() override;
+    static void displayProjectiles(sf::RenderTarget &target, sf::RenderStates states);
+    static void moveProjectiles();
+    static void checkProjectilesCollisions(std::vector<Enemy>&);
 };
 
 

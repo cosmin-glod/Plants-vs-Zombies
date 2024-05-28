@@ -4,10 +4,6 @@
 
 #include "headers/Game.h"
 
-int Game::resources = 0;
-int Game::score = 0;
-int Game::highScore = 0;
-
 void readHighScore() {
     int highScore;
     std::ifstream fin("high_score.txt");
@@ -19,5 +15,8 @@ int main() {
     readHighScore();
     Game game;
     game.run();
+    std::ofstream fout("high_score.txt");
+    Game::updateHighScore(fout);
+    fout.close();
     return 0;
 }
