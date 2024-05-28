@@ -14,6 +14,7 @@
 #include "Cats/WallCat.h"
 #include "Projectile.h"
 #include "Button.h"
+#include "TextureManager.h"
 
 class Game {
     sf::RenderWindow window;
@@ -22,7 +23,7 @@ class Game {
     static int highScore;
     static bool isMousePressed;
 
-    std::vector<sf::RectangleShape> background_tiles;
+    std::vector<sf::Sprite> background_tiles;
     std::vector<Enemy> enemies;
     std::vector<std::unique_ptr<Cat>> cats;
 

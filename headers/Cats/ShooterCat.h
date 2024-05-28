@@ -11,8 +11,7 @@
 
 class ShooterCat : public Cat {
 private:
-    sf::Color color{sf::Color(202, 209, 12)};
-    float projectilesPerSeconds{1.5};
+    float projectilesOnceEverySeconds{1.5};
     sf::Clock fireClock;
     static std::vector<Projectile> projectiles;
 public:

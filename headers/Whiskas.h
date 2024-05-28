@@ -5,16 +5,16 @@
 #ifndef OOP_WHISKAS_H
 #define OOP_WHISKAS_H
 
-#include "CircleShape.h"
+#include "Drawable.h"
 
-class Whiskas : public CircleShape {
+class Whiskas : public Drawable {
 private:
     sf::Color color{sf::Color(255,90,54)};
     float speed;
 public:
-    explicit Whiskas(sf::Vector2f, float speed_ = 0);
+    explicit Whiskas(sf::Texture&, sf::Vector2f, float speed_ = 0);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
-    void move() override;
+    void move();
 };
 
 

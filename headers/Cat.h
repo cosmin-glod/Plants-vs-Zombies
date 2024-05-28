@@ -10,10 +10,11 @@
 
 class Cat : public Drawable {
 protected:
+    sf::Texture texture;
 //    int health{100};
 //    int cost;
 public:
-    explicit Cat(int);
+    Cat() = default;
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     void setPosition(sf::Vector2f);
     virtual void run() = 0;

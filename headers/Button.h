@@ -19,7 +19,7 @@ class Button : public Drawable{
     int cost;
     sf::Text costText;
 public:
-    Button(sf::Vector2f, float, float, sf::Color, int);
+    Button(sf::Texture&, sf::Vector2f, int);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 
     static void drag(sf::Vector2f&);

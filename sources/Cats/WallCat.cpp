@@ -4,8 +4,8 @@
 
 #include "../../headers/Cats/WallCat.h"
 
-WallCat::WallCat() : Cat(50) {
-    body.setFillColor(color);
+WallCat::WallCat() {
+    sprite.setTexture(TextureManager::getTexture("textures/cats/wall-cat.png"));
 }
 
 void WallCat::run() {

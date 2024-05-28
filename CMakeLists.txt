@@ -152,10 +152,10 @@ add_executable(${PROJECT_NAME}
         sources/Cats/WallCat.cpp
         headers/Projectile.h
         sources/Projectile.cpp
-        headers/CircleShape.h
-        sources/CircleShape.cpp
         headers/Whiskas.h
         sources/Whiskas.cpp
+        headers/TextureManager.h
+        sources/TextureManager.cpp
 )
 
 ###############################################################################
@@ -205,7 +205,7 @@ endif()
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # update name in .github/workflows/cmake.yml:29 when changing "bin" name here
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-# install(DIRECTORY some_dir1 some_dir2 DESTINATION bin)
+install(DIRECTORY textures fonts DESTINATION bin)
 # install(FILES some_file1.txt some_file2.md DESTINATION bin)
 if(APPLE)
     install(FILES launcher.command DESTINATION bin)

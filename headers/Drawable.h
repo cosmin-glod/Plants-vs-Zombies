@@ -12,13 +12,13 @@
 
 class Drawable {
 protected:
-    sf::RectangleShape body;
+    sf::Sprite sprite;
 public:
     Drawable() = default;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
-    virtual sf::RectangleShape getShape() const;
+    sf::Sprite getSprite();
     virtual ~Drawable() = default;
-    void setter(sf::Vector2f, sf::Vector2f, sf::Color);
+    void setter(sf::Texture&, sf::Vector2f);
 };
 
 #endif //OOP_DRAWABLE_H

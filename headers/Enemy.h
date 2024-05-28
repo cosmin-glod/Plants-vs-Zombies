@@ -17,7 +17,7 @@ protected:
     sf::Time spawnTime;
 public:
     /// Constructori / Destructori
-    explicit Enemy(int, float);
+    explicit Enemy(sf::Texture&, int, float);
 
     void move();
 

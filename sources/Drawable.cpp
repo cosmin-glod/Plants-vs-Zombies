@@ -4,18 +4,15 @@
 
 #include "../headers/Drawable.h"
 
-sf::RectangleShape Drawable::getShape() const {
-    return body;
+sf::Sprite Drawable::getSprite() {
+    return sprite;
 }
 
 void Drawable::draw(sf::RenderTarget &target, sf::RenderStates states) {
-    target.draw(body, states);
+    target.draw(sprite, states);
 }
 
-void Drawable::setter(sf::Vector2f size, sf::Vector2f position, sf::Color color) {
-    body.setSize(size);
-    body.setPosition(position);
-    body.setFillColor(color);
-    body.setOutlineColor(sf::Color(165, 42, 42));
-    body.setOutlineThickness(2.f);
+void Drawable::setter(sf::Texture& texture, sf::Vector2f position) {
+    sprite.setTexture(texture);
+    sprite.setPosition(position);
 }

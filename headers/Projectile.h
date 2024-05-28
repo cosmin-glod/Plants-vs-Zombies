@@ -5,15 +5,17 @@
 #ifndef OOP_PROJECTILE_H
 #define OOP_PROJECTILE_H
 
-#include "CircleShape.h"
+#include "Drawable.h"
+#include "TextureManager.h"
 
-class Projectile : public CircleShape {
+class Projectile : public Drawable {
 private:
     int speed{4};
+    sf::Sprite sprite;
 public:
-    explicit Projectile(sf::Vector2f);
+    explicit Projectile(sf::Vector2f, const sf::Texture&);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
-    void move() override;
+    void move();
 };
 
 

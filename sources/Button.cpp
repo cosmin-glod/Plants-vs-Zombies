@@ -12,30 +12,27 @@ bool Button<T>::dragging = false;
 
 template<typename T>
 void Button<T>::draw(sf::RenderTarget &target, sf::RenderStates states) {
-    target.draw(body, states);
+    target.draw(sprite, states);
     target.draw(costText, states);
 }
 
 template<typename T>
 void Button<T>::displayEntity(sf::RenderTarget &target, sf::RenderStates states) {
     if (entity != nullptr)
-        target.draw(entity->getShape(), states);
+        target.draw(entity->getSprite(), states);
 }
 
 template<typename T>
-Button<T>::Button(sf::Vector2f size, float x, float y, sf::Color color, int cost_) : cost{cost_} {
-    body.setSize(size);
-    body.setPosition(x, y);
-    body.setFillColor(color);
-    body.setOutlineThickness(2.f);
-    body.setOutlineColor(sf::Color(165, 42, 42));
+Button<T>::Button(sf::Texture& texture, sf::Vector2f position, int cost_) : cost{cost_} {
+    sprite.setTexture(texture);
+    sprite.setPosition(position);
 
     font.loadFromFile("fonts/yoster.ttf");
 
     costText.setFont(font);
     costText.setScale(0.7f, 0.7f);
     costText.setString(std::to_string(cost));
-    costText.setPosition(x + 75.f, y + 70.f);
+    costText.setPosition(position + sf::Vector2f (75.f, 70.f));
 }
 
 template<typename T>

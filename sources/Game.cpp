@@ -18,19 +18,16 @@ int Game::highScore = 0;
 
 Game::Game() :
     window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
-    shooterCatButton{Button<ShooterCat>(Button<ShooterCat>(sf::Vector2f(200.f, 100.f), 0.f, 0.f, sf::Color(202, 209, 12), 100))},
-    generatorCatButton{Button<GeneratorCat>(sf::Vector2f(200.f, 100.f), 200.f, 0.f, sf::Color(12, 209, 28), 50)},
-    wallCatButton{Button<WallCat>(sf::Vector2f(200.f, 100.f), 400.f, 0.f, sf::Color(12, 182, 209), 150)},
+    shooterCatButton{Button<ShooterCat>(TextureManager::getTexture("textures/cat-icons/shooter-cat-icon.png"), sf::Vector2f (5.f, 5.f), 100)},
+    generatorCatButton{Button<GeneratorCat>(TextureManager::getTexture("textures/cat-icons/generator-cat-icon.png"), sf::Vector2f (205.f, 5.f), 50)},
+    wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f), 150)},
 
     grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
 
-        /// Initializare tiles
-    sf::RectangleShape tile;
-    tile.setSize(sf::Vector2f (150.f, 150.f));
-    tile.setFillColor(sf::Color(144, 238, 144));
-    tile.setOutlineThickness(3.f);
-    tile.setOutlineColor(sf::Color(165, 42, 42));
+    /// Initializare tiles
+    sf::Sprite tile;
+    tile.setTexture(TextureManager::getTexture("textures/bg/background-tile.png"));
 
     window.setFramerateLimit(60);
 
@@ -41,12 +38,17 @@ Game::Game() :
             background_tiles.push_back(tile);
         }
     }
+    sf::Sprite slot;
+    slot.setTexture(TextureManager::getTexture("textures/bg/slot.png"));
+    for (int i = 0; i < 3; ++i) {
+        slot.setPosition(float(i) * 200.f, 0.f);
+        background_tiles.push_back(slot);
+    }
 
     /// construire box-uri pt scor si altele
-    resourcesBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(600.f, 0.f), sf::Color(186,85,211));
-    enemyCountBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(900.f, 0.f), sf::Color(255,196,12));
-    scoreBox.setter(sf::Vector2f(300.f, 100.f), sf::Vector2f(1200.f, 0.f), sf::Color(0,128,128));
-
+    resourcesBox.setter(TextureManager::getTexture("textures/info-bar/resourcesBox.png"), sf::Vector2f (600.f, 0.f));
+    enemyCountBox.setter(TextureManager::getTexture("textures/info-bar/enemyCountBox.png"), sf::Vector2f (900.f, 0.f));
+    scoreBox.setter(TextureManager::getTexture("textures/info-bar/scoreBox.png"), sf::Vector2f (1200.f, 0.f));
     /// construire text
     font.loadFromFile("./fonts/yoster.ttf");
     scoreText.setFont(font);
@@ -84,7 +86,7 @@ void Game::update() {
     /// Move Enemies
     for (unsigned int i = 0; i < enemies.size(); ++i) {
         enemies[i].move();
-        if (enemies[i].getShape().getPosition().x <= 0.f)
+        if (enemies[i].getSprite().getPosition().x <= 0.f)
             enemies.erase(enemies.begin() + i);
     }
 
@@ -110,6 +112,7 @@ void Game::update() {
 }
 
 void Game::render() {
+    window.clear();
     /// Render background tiles
     for (auto &tile : background_tiles)
         window.draw(tile);
@@ -212,7 +215,7 @@ void Game::spawnEnemy() {
     int randomLine = dis(gen);
 
     // Create and initialize the enemy with the random line
-    Enemy enemy(randomLine, 1.5f); // NOLINT(*-use-auto)
+    Enemy enemy(TextureManager::getTexture("textures/box.png") ,randomLine, 1.5f); // NOLINT(*-use-auto)
 
     // Add the enemy to your collection or perform further actions
     // For example, you might have a vector of enemies
@@ -226,8 +229,6 @@ void Game::updateMousePosition() {
 }
 
 void Game::handleDragAndDrop() {
-    ///
-    std::cout << "Mouse apasaat\n";
     if (Button<ShooterCat>::isDragging())
         Button<ShooterCat>::drag(mousePosView);
     else if (Button<GeneratorCat>::isDragging())
