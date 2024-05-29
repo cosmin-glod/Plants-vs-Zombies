@@ -11,7 +11,6 @@
 class Projectile : public Drawable {
 private:
     int speed{4};
-    sf::Sprite sprite;
 public:
     explicit Projectile(sf::Vector2f, const sf::Texture&);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;

@@ -4,10 +4,6 @@
 
 #include "../../headers/Cats/WallCat.h"
 
-WallCat::WallCat() {
+WallCat::WallCat(sf::Vector2f position) : Cat(position, 700) {
     sprite.setTexture(TextureManager::getTexture("textures/cats/wall-cat.png"));
-}
-
-void WallCat::run() {
-
 }

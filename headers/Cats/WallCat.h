@@ -10,6 +10,7 @@
 class WallCat : public Cat {
 private:
 public:
+    WallCat() = default;
     explicit WallCat(sf::Vector2f);
     void run() override {};
 };
