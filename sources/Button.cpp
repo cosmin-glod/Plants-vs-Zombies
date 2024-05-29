@@ -36,7 +36,7 @@ Button<T>::Button(sf::Texture& texture, sf::Vector2f position, int cost_) : cost
 }
 
 template<typename T>
-void Button<T>::drag(sf::Vector2f& mousePosition) {
+void Button<T>::drag(const sf::Vector2f& mousePosition) {
     entity->setPosition(mousePosition);
 }
 

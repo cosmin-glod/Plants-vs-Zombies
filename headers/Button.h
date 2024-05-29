@@ -22,7 +22,7 @@ public:
     Button(sf::Texture&, sf::Vector2f, int);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 
-    static void drag(sf::Vector2f&);
+    static void drag(const sf::Vector2f&);
     static void place(sf::Vector2f&, std::vector<std::shared_ptr<Cat>>&, std::vector<std::vector<bool>>&);
     static void instantiate(sf::Vector2f&);
     static bool isDragging();
