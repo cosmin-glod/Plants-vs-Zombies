@@ -15,7 +15,7 @@ protected:
     sf::Sprite sprite;
 public:
     Drawable() = default;
-    Drawable(sf::Vector2f);
+    explicit Drawable(sf::Vector2f);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states);
     sf::Sprite getSprite();
     virtual ~Drawable() = default;

@@ -9,7 +9,7 @@ std::vector<Whiskas> GeneratorCat::resources = std::vector<Whiskas>();
 
 GeneratorCat::GeneratorCat(sf::Vector2f position) : Cat(position) {
     sprite.setTexture(TextureManager::getTexture("textures/cats/generator-cat.png"));
-};
+}
 
 void GeneratorCat::run() {
     sf::Time deltaTime = generateClock.getElapsedTime();

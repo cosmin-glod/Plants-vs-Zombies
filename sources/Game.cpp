@@ -10,7 +10,7 @@ sf::Vector2f Game::mousePosView = sf::Vector2f();
 bool Game::isMousePressed = false;
 
 float Game::spawnOnceSeconds = 5.f;
-int Game::numberOfDificultyStages = 4;
+int Game::numberOfDificultyStages = 3;
 float Game::nextDificultyStage = 46.f;
 
 int Game::resources = 1000;
@@ -69,34 +69,34 @@ Game::Game() :
 }
 void Game::update() {
 
-//    stageTime = stageTimer.getElapsedTime();
-//    if (stageTime >= sf::seconds(nextDificultyStage)) {
-//        numberOfDificultyStages--;
-//        switch (numberOfDificultyStages) {
-//            case 2:
-//                spawnOnceSeconds = 2.f;
-//                nextDificultyStage += 30.f;
-//                break;
-//            case 1:
-//                spawnOnceSeconds = 0.5f;
-//                nextDificultyStage += 30.f;
-//                break;
-//            case 0:
-//                spawnOnceSeconds = 0.1f;
-//                nextDificultyStage += 8.f;
-//                numberOfDificultyStages = 2;
-//                break;
-//            default:
-//                break;
-//        }
-//    }
+    stageTime = stageTimer.getElapsedTime();
+    if (stageTime >= sf::seconds(nextDificultyStage)) {
+        numberOfDificultyStages--;
+        switch (numberOfDificultyStages) {
+            case 2:
+                spawnOnceSeconds = 2.f;
+                nextDificultyStage += 30.f;
+                break;
+            case 1:
+                spawnOnceSeconds = 0.5f;
+                nextDificultyStage += 30.f;
+                break;
+            case 0:
+                spawnOnceSeconds = 0.05f;
+                nextDificultyStage += 12.f;
+                numberOfDificultyStages = 3;
+                break;
+            default:
+                break;
+        }
+    }
 
-    /// Spawn Enemies
-//    sf::Time deltaTime = spawnTimer.getElapsedTime();
-//    if (deltaTime >= sf::seconds(spawnOnceSeconds)) {
-//        spawnEnemy();
-//        spawnTimer.restart();
-//    }
+//    Spawn Enemies
+    sf::Time deltaTime = spawnTimer.getElapsedTime();
+    if (deltaTime >= sf::seconds(spawnOnceSeconds)) {
+        spawnEnemy();
+        spawnTimer.restart();
+    }
 
     /// Move Enemies
     for (unsigned int i = 0; i < enemies.size(); ++i) {
@@ -130,13 +130,13 @@ void Game::update() {
     }
 
     /// Cat - Enemy Collision
-    for (unsigned i = 0; i < enemies.size(); ++i) {
+    for (auto &enemy : enemies) {
         for (unsigned j = 0; j < cats.size(); ++j) {
-            if (enemies[i].getSprite().getGlobalBounds().intersects(cats[j]->getSprite().getGlobalBounds())) {
+            if (enemy.getSprite().getGlobalBounds().intersects(cats[j]->getSprite().getGlobalBounds())) {
 //                std::cout << "am intrat\n";
                 cats[j]->gotHit();
 //                std::cout << cats[i]->getHealth() << '\n';
-                enemies[i].cannotMoveAnymore();
+                enemy.cannotMoveAnymore();
                 if (!cats[j]->isAlive()) {
                     cats.erase(cats.begin() + j);
                     --j;

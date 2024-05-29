@@ -22,7 +22,7 @@ void Cat::gotHit() {
     --health;
 }
 
-int Cat::getHealth() const {
+[[maybe_unused]] int Cat::getHealth() const {
     return health;
 }
 
