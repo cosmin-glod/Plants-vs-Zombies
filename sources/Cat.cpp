@@ -22,9 +22,9 @@ void Cat::gotHit() {
     --health;
 }
 
-int Cat::getHealth() const {
-    return health;
-}
+//int Cat::getHealth() const {
+//    return health;
+//}
 
 Cat::Cat(sf::Vector2f position, int health_) : Drawable(position), health{health_} {}
 

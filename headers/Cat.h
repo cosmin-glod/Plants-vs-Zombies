@@ -23,7 +23,7 @@ public:
     bool isAlive() const;
     void gotHit();
 
-    [[maybe_unused]] int getHealth() const;
+//    [[maybe_unused]] int getHealth() const;
 };
 
 
