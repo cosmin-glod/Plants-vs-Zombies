@@ -9,11 +9,11 @@ sf::Vector2f Game::mousePosView = sf::Vector2f();
 
 bool Game::isMousePressed = false;
 
-float Game::spawnOnceSeconds = 5.f;
+float Game::spawnOnceSeconds = 15.f;
 int Game::numberOfDificultyStages = 3;
 float Game::nextDificultyStage = 46.f;
 
-int Game::resources = 1000;
+int Game::resources = 100;
 int Game::score = 0;
 int Game::highScore = 0;
 
@@ -79,11 +79,11 @@ void Game::update() {
                 break;
             case 1:
                 spawnOnceSeconds = 0.5f;
-                nextDificultyStage += 30.f;
+                nextDificultyStage += 100.f;
                 break;
             case 0:
                 spawnOnceSeconds = 0.05f;
-                nextDificultyStage += 12.f;
+                nextDificultyStage += 20.f;
                 numberOfDificultyStages = 3;
                 break;
             default:

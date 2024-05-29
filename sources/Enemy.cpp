@@ -37,6 +37,5 @@ void Enemy::cannotMoveAnymore() {
 
 void Enemy::nowCanMove() {
     canMove = true;
-    std::cout << "am intrat";
 }
 
