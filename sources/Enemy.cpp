@@ -18,7 +18,8 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) {
 }
 
 void Enemy::move() {
-    sprite.move(-float(speed), 0.f);
+    if (canMove)
+        sprite.move(-float(speed), 0.f);
 }
 
 bool Enemy::isAlive() const {
@@ -28,5 +29,14 @@ bool Enemy::isAlive() const {
 void Enemy::gotHit() {
     --hp;
     Game::increaseScore();
+}
+
+void Enemy::cannotMoveAnymore() {
+    canMove = false;
+}
+
+void Enemy::nowCanMove() {
+    canMove = true;
+    std::cout << "am intrat";
 }
 

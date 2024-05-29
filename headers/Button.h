@@ -13,7 +13,7 @@
 
 template<typename T>
 class Button : public Drawable{
-    static std::unique_ptr<Cat> entity;
+    static std::shared_ptr<Cat> entity;
     [[maybe_unused]] static bool dragging;
     sf::Font font;
     int cost;
@@ -23,7 +23,7 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
 
     static void drag(sf::Vector2f&);
-    static void place(sf::Vector2f&, std::vector<std::unique_ptr<Cat>>&, std::vector<std::vector<bool>>&);
+    static void place(sf::Vector2f&, std::vector<std::shared_ptr<Cat>>&, std::vector<std::vector<bool>>&);
     static void instantiate(sf::Vector2f&);
     static bool isDragging();
     static void displayEntity(sf::RenderTarget&, sf::RenderStates);

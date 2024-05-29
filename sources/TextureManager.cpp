@@ -13,7 +13,7 @@ sf::Texture &TextureManager::getTexture(const std::string &filename) {
     } else {
         sf::Texture texture;
         if (!texture.loadFromFile(filename)) {
-            throw std::runtime_error("Failed to load texture: " + filename);
+            throw MissingTexture("The texture from \"" + filename + "\" is missing ! :(");
         }
         textures[filename] = texture;
         return textures[filename];

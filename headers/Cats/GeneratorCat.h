@@ -10,12 +10,11 @@
 
 class GeneratorCat : public Cat {
 private:
-    sf::Color color{sf::Color(12, 209, 28)};
     sf::Clock generateClock;
-    float whiskasOnceEverySeconds{15};
+    float whiskasOnceEverySeconds{7};
     static std::vector<Whiskas> resources;
 public:
-    GeneratorCat();
+    explicit GeneratorCat(sf::Vector2f);
     void run() override;
     static void displayWhiskas(sf::RenderWindow&, sf::RenderStates);
     static void collectWhiskas();

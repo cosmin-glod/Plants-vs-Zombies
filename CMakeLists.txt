@@ -156,6 +156,8 @@ add_executable(${PROJECT_NAME}
         sources/Whiskas.cpp
         headers/TextureManager.h
         sources/TextureManager.cpp
+        headers/Exception.h
+        sources/Exception.cpp
 )
 
 ###############################################################################

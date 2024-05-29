@@ -13,8 +13,9 @@ class Enemy : public Drawable {
 protected:
     int line;
     float hp{3};
-    float speed;
+    float speed{};
     sf::Time spawnTime;
+    bool canMove{true};
 public:
     /// Constructori / Destructori
     explicit Enemy(sf::Texture&, int, float);
@@ -24,6 +25,8 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     bool isAlive() const;
     void gotHit();
+    void cannotMoveAnymore();
+    void nowCanMove();
 };
 
 #endif //OOP_ENEMY_H

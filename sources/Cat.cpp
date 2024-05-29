@@ -12,6 +12,22 @@ void Cat::setPosition(sf::Vector2f position) {
     sprite.setPosition(position + sf::Vector2f (-50.f, -50.f));
 }
 
+Cat::Cat(sf::Vector2f position) : Drawable(position) {}
+
+bool Cat::isAlive() const {
+    return health > 0;
+}
+
+void Cat::gotHit() {
+    --health;
+}
+
+int Cat::getHealth() const {
+    return health;
+}
+
+Cat::Cat(sf::Vector2f position, int health_) : Drawable(position), health{health_} {}
+
 //int Cat::getCost() const {
 //    return cost;
 //}

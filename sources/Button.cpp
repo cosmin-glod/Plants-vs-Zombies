@@ -5,7 +5,7 @@
 #include "../headers/Button.h"
 
 template<typename T>
-std::unique_ptr<Cat> Button<T>::entity = nullptr;
+std::shared_ptr<Cat> Button<T>::entity = nullptr;
 
 template<typename T>
 bool Button<T>::dragging = false;
@@ -43,18 +43,20 @@ void Button<T>::drag(sf::Vector2f& mousePosition) {
 template<typename T>
 void Button<T>::instantiate(sf::Vector2f &mousePosition) {
     dragging = true;
-    entity = std::make_unique<T>();
-    entity->setPosition(mousePosition);
+    entity = std::make_shared<T>(mousePosition);
 }
 
 template<typename T>
-void Button<T>::place(sf::Vector2f &mousePosition, std::vector<std::unique_ptr<Cat>>& cats, std::vector<std::vector<bool>>& grid) {
+void Button<T>::place(sf::Vector2f &mousePosition, std::vector<std::shared_ptr<Cat>>& cats, std::vector<std::vector<bool>>& grid) {
         sf::Vector2f tilePos;
         int x = static_cast<int>(mousePosition.x) / 150;
         int y = static_cast<int>(mousePosition.y - 100.f) / 150;
 
+//        std::cout << x << ' ' << y << '\n';
+        if (x < 0 || y < 0 || x >= 10 || y >= 5)
+            throw InvalidPosition("Tile position (" + std::to_string(x) + ", " + std::to_string(y) + ") is invalid !");
         if (!grid[y][x]) {
-            tilePos.x = static_cast<float>(x) * 150.f + 75.f;
+            tilePos.x = static_cast<float>(x) * 150.f + 55.f;
             tilePos.y = static_cast<float>(y) * 150.f + 175.f;
 
             entity->setPosition(tilePos);

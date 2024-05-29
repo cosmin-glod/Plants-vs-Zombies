@@ -11,11 +11,11 @@
 
 class ShooterCat : public Cat {
 private:
-    float projectilesOnceEverySeconds{1.5};
+    float projectilesOnceEverySeconds{1.5f};
     sf::Clock fireClock;
     static std::vector<Projectile> projectiles;
 public:
-    ShooterCat();
+    explicit ShooterCat(sf::Vector2f);
     void run() override;
     static void displayProjectiles(sf::RenderTarget &target, sf::RenderStates states);
     static void moveProjectiles();

@@ -15,9 +15,10 @@
 #include "Projectile.h"
 #include "Button.h"
 #include "TextureManager.h"
+#include "exception.h"
 
 class Game {
-    sf::RenderWindow window;
+    static sf::RenderWindow window;
     static int resources;
     static int score;
     static int highScore;
@@ -25,7 +26,7 @@ class Game {
 
     std::vector<sf::Sprite> background_tiles;
     std::vector<Enemy> enemies;
-    std::vector<std::unique_ptr<Cat>> cats;
+    std::vector<std::shared_ptr<Cat>> cats;
 
     Button<ShooterCat> shooterCatButton;
     Button<GeneratorCat> generatorCatButton;
@@ -45,11 +46,11 @@ class Game {
 
     sf::Clock spawnTimer;
 
-    static float dificulty;
-    sf::Clock dificultyTimer;
-    static float nextDificultyIncrease;
-    static int dificultyIncreaseCounter;
-    sf::Time deltaDificultyTime;
+    static float spawnOnceSeconds;
+    static int numberOfDificultyStages;
+    sf::Time stageTime;
+    sf::Clock stageTimer;
+    static float nextDificultyStage;
 
     static sf::Vector2i mousePosWindow;
     static sf::Vector2f mousePosView;
@@ -60,12 +61,12 @@ public:
     Game();
     ~Game() = default;
 
-    [[nodiscard]] bool isRunning() const;
+    [[nodiscard]] static bool isRunning() ;
     static void setHighScore(const int&);
 
     /// Functii
     void run();
-
+    static void closeWindow();
     static sf::Vector2f getMousePosition();
 
     /// Spawners
@@ -76,7 +77,7 @@ public:
     void handleEvents();
     void update();
     void render();
-    void updateMousePosition();
+    static void updateMousePosition();
 
     static void updateHighScore(std::ostream&);
     [[maybe_unused]] static void increaseScore();

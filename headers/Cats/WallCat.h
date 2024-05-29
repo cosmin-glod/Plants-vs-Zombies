@@ -9,10 +9,9 @@
 
 class WallCat : public Cat {
 private:
-    sf::Color color{sf::Color(12, 182, 209)};
 public:
-    WallCat();
-    void run() override;
+    explicit WallCat(sf::Vector2f);
+    void run() override {};
 };
 
 

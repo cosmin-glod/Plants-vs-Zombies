@@ -7,7 +7,7 @@
 
 std::vector<Whiskas> GeneratorCat::resources = std::vector<Whiskas>();
 
-GeneratorCat::GeneratorCat() {
+GeneratorCat::GeneratorCat(sf::Vector2f position) : Cat(position) {
     sprite.setTexture(TextureManager::getTexture("textures/cats/generator-cat.png"));
 };
 

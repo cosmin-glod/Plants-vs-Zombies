@@ -16,6 +16,8 @@ public:
     explicit Projectile(sf::Vector2f, const sf::Texture&);
     void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     void move();
+    bool isOutOfBounds();
+    bool collision(sf::FloatRect);
 };
 
 

@@ -8,16 +8,18 @@ sf::Vector2i Game::mousePosWindow = sf::Vector2i();
 sf::Vector2f Game::mousePosView = sf::Vector2f();
 
 bool Game::isMousePressed = false;
-float Game::dificulty = 0.1f;
-float Game::nextDificultyIncrease = 15.f;
-int Game::dificultyIncreaseCounter = 5;
 
-int Game::resources = 300;
+float Game::spawnOnceSeconds = 5.f;
+int Game::numberOfDificultyStages = 4;
+float Game::nextDificultyStage = 46.f;
+
+int Game::resources = 1000;
 int Game::score = 0;
 int Game::highScore = 0;
 
+sf::RenderWindow Game::window = sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close);
+
 Game::Game() :
-    window{sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close)},
     shooterCatButton{Button<ShooterCat>(TextureManager::getTexture("textures/cat-icons/shooter-cat-icon.png"), sf::Vector2f (5.f, 5.f), 100)},
     generatorCatButton{Button<GeneratorCat>(TextureManager::getTexture("textures/cat-icons/generator-cat-icon.png"), sf::Vector2f (205.f, 5.f), 50)},
     wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f), 150)},
@@ -50,7 +52,9 @@ Game::Game() :
     enemyCountBox.setter(TextureManager::getTexture("textures/info-bar/enemyCountBox.png"), sf::Vector2f (900.f, 0.f));
     scoreBox.setter(TextureManager::getTexture("textures/info-bar/scoreBox.png"), sf::Vector2f (1200.f, 0.f));
     /// construire text
-    font.loadFromFile("./fonts/yoster.ttf");
+    if (!font.loadFromFile("./fonts/yoster.ttf")) {
+        throw MissingFont("The font \"./fonts/yoster.ttf\" was not found! :(\n");
+    }
     scoreText.setFont(font);
     scoreText.setPosition(sf::Vector2f(1210.f, 10.f));
     scoreText.setString("Score: 0\nHigh Score: " + std::to_string(highScore));
@@ -60,28 +64,39 @@ Game::Game() :
 
     enemyCountText.setFont(font);
     enemyCountText.setPosition(sf::Vector2f (925.f, 30.f));
+
+//    spawnEnemy();
 }
 void Game::update() {
 
-//     Update speedMultiplier based on elapsed time
-    if (dificultyIncreaseCounter) {
-        deltaDificultyTime = dificultyTimer.getElapsedTime();
-        if (deltaDificultyTime >= sf::seconds(nextDificultyIncrease)) {
-            dificulty += 0.2f; // Adjust the increment as needed
-            dificultyIncreaseCounter--;
-
-            nextDificultyIncrease += 10.f; // After another 15 seconds, increase after 10 seconds
-
-            dificultyTimer.restart();
-        }
-    }
+//    stageTime = stageTimer.getElapsedTime();
+//    if (stageTime >= sf::seconds(nextDificultyStage)) {
+//        numberOfDificultyStages--;
+//        switch (numberOfDificultyStages) {
+//            case 2:
+//                spawnOnceSeconds = 2.f;
+//                nextDificultyStage += 30.f;
+//                break;
+//            case 1:
+//                spawnOnceSeconds = 0.5f;
+//                nextDificultyStage += 30.f;
+//                break;
+//            case 0:
+//                spawnOnceSeconds = 0.1f;
+//                nextDificultyStage += 8.f;
+//                numberOfDificultyStages = 2;
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     /// Spawn Enemies
-    sf::Time deltaTime = spawnTimer.getElapsedTime();
-    if (deltaTime >= sf::seconds(1.5f / dificulty)) {
-        spawnEnemy();
-        spawnTimer.restart();
-    }
+//    sf::Time deltaTime = spawnTimer.getElapsedTime();
+//    if (deltaTime >= sf::seconds(spawnOnceSeconds)) {
+//        spawnEnemy();
+//        spawnTimer.restart();
+//    }
 
     /// Move Enemies
     for (unsigned int i = 0; i < enemies.size(); ++i) {
@@ -91,8 +106,12 @@ void Game::update() {
     }
 
     /// Each cat does its thing
-    for (auto &cat : cats)
-        cat->run();
+    for (auto &cat : cats) {
+        if (std::dynamic_pointer_cast<ShooterCat>(cat) || std::dynamic_pointer_cast<GeneratorCat>(cat))
+            cat->run();
+    }
+//    for (auto &cat : cats)
+//        cat->run();
 
     /// Move Projectiles
     ShooterCat::moveProjectiles();
@@ -102,9 +121,29 @@ void Game::update() {
     /// Update Score
     scoreText.setString("Score: " + std::to_string(score) + "\nHigh Score: " + std::to_string(highScore));
     resourcesText.setString("Whiskas: " + std::to_string(resources));
-    enemyCountText.setString("Speed : " + std::to_string(dificulty));
+    enemyCountText.setString("Dificulty : " + std::to_string(4 - numberOfDificultyStages));
 
     ShooterCat::checkProjectilesCollisions(enemies);
+
+    for (auto &enemy : enemies) {
+        enemy.nowCanMove();
+    }
+
+    /// Cat - Enemy Collision
+    for (unsigned i = 0; i < enemies.size(); ++i) {
+        for (unsigned j = 0; j < cats.size(); ++j) {
+            if (enemies[i].getSprite().getGlobalBounds().intersects(cats[j]->getSprite().getGlobalBounds())) {
+//                std::cout << "am intrat\n";
+                cats[j]->gotHit();
+//                std::cout << cats[i]->getHealth() << '\n';
+                enemies[i].cannotMoveAnymore();
+                if (!cats[j]->isAlive()) {
+                    cats.erase(cats.begin() + j);
+                    --j;
+                }
+            }
+        }
+    }
 
     /// Drag and drop
     if (isMousePressed)
@@ -158,7 +197,7 @@ void Game::render() {
     window.display();
 }
 
-bool Game::isRunning() const {
+bool Game::isRunning() {
     return window.isOpen();
 }
 
@@ -168,11 +207,11 @@ void Game::handleEvents() {
     while (window.pollEvent(ev)) {
         switch (ev.type) {
             case sf::Event::Closed:
-                window.close();
+                closeWindow();
                 break;
             case sf::Event::KeyPressed:
                 if (ev.key.code == sf::Keyboard::Escape)
-                    window.close();
+                    closeWindow();
                 break;
             case sf::Event::MouseButtonPressed:
                 if (ev.mouseButton.button == sf::Mouse::Left) {
@@ -183,7 +222,12 @@ void Game::handleEvents() {
             case sf::Event::MouseButtonReleased:
                 if (ev.mouseButton.button == sf::Mouse::Left) {
                     isMousePressed = false;
-                    handleButtonRelease();
+                    try {
+                        handleButtonRelease();
+                    }
+                    catch (InvalidPosition&) {
+                        std::cout << "The cat wasn't placed !";
+                    }
                 }
                 break;
             default:
@@ -215,8 +259,7 @@ void Game::spawnEnemy() {
     int randomLine = dis(gen);
 
     // Create and initialize the enemy with the random line
-    Enemy enemy(TextureManager::getTexture("textures/box.png") ,randomLine, 1.5f); // NOLINT(*-use-auto)
-
+    Enemy enemy(TextureManager::getTexture("textures/box.png") ,randomLine, 1.f);
     // Add the enemy to your collection or perform further actions
     // For example, you might have a vector of enemies
     enemies.push_back(enemy);
@@ -264,6 +307,8 @@ void Game::handleButtonRelease() {
             decreaseResources(150);
         }
     }
+    else
+        throw InvalidPosition("Pozitie invalida!");
 }
 
 void Game::updateHighScore(std::ostream& fout) {
@@ -286,5 +331,9 @@ sf::Vector2f Game::getMousePosition() {
 
 void Game::decreaseResources(int amount) {
     resources -= amount;
+}
+
+void Game::closeWindow() {
+    window.close();
 }
 

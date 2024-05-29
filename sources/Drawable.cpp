@@ -16,3 +16,7 @@ void Drawable::setter(sf::Texture& texture, sf::Vector2f position) {
     sprite.setTexture(texture);
     sprite.setPosition(position);
 }
+
+Drawable::Drawable(sf::Vector2f position) {
+    sprite.setPosition(position);
+}

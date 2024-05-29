@@ -6,7 +6,7 @@
 
 void Projectile::move() {
     sprite.move(static_cast<float>(speed), 0.f);
-    std::cout << "poz : " << sprite.getPosition().x << '\n';
+//    std::cout << "poz : " << sprite.getPosition().x << '\n';
 }
 
 Projectile::Projectile(sf::Vector2f position, const sf::Texture& texture) {
@@ -14,7 +14,7 @@ Projectile::Projectile(sf::Vector2f position, const sf::Texture& texture) {
 
 //    body.setRadius(20.f);
     sprite.setPosition(position);
-    std::cout << sprite.getPosition().x << '\n';
+//    std::cout << sprite.getPosition().x << '\n';
 //    body.setFillColor(sf::Color(128,128,128));
 
     sf::FloatRect bounds = sprite.getLocalBounds();
@@ -24,4 +24,15 @@ Projectile::Projectile(sf::Vector2f position, const sf::Texture& texture) {
 void Projectile::draw(sf::RenderTarget &target, sf::RenderStates states) {
     target.draw(sprite, states);
 }
+
+bool Projectile::isOutOfBounds() {
+    return (sprite.getPosition().x >= 1500.f);
+}
+
+bool Projectile::collision(sf::FloatRect enemy) {
+    return (sprite.getGlobalBounds().intersects(enemy));
+}
+
+
+
 
