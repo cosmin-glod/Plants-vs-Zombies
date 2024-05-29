@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
-#include "exception.h"
+#include "Exception.h"
 
 class TextureManager {
 public:

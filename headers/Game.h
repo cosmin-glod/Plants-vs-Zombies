@@ -15,7 +15,7 @@
 #include "Projectile.h"
 #include "Button.h"
 #include "TextureManager.h"
-#include "exception.h"
+#include "Exception.h"
 
 class Game {
     static sf::RenderWindow window;
