@@ -66,7 +66,7 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
     - constructori virtuali (clone): sunt necesari, dar nu se consideră funcții specifice temei
   - [x] apelarea constructorului din clasa de bază din constructori din derivate
   - [x] smart pointers (recomandat, opțional)
-  - [ ] `dynamic_cast`/`std::dynamic_pointer_cast` pentru downcast cu sens
+  - [x] `dynamic_cast`/`std::dynamic_pointer_cast` pentru downcast cu sens
 - [ ] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
 - [x] excepții
   - [x] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`; minim **3** clase pentru erori specifice
