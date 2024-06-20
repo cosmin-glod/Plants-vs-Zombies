@@ -15,3 +15,5 @@ MissingFont::MissingFont(const std::string& err) : GeneralException(err) {}
 MissingTexture::MissingTexture(const std::string& err) : GeneralException(err) {}
 
 InvalidPosition::InvalidPosition(const std::string &err) : GeneralException(err) {}
+
+OccupiedPosition::OccupiedPosition(const std::string &err) : GeneralException(err) {}

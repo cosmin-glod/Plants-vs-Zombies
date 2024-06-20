@@ -54,7 +54,7 @@ void Button<T>::place(sf::Vector2f &mousePosition, std::vector<std::shared_ptr<C
 
 //        std::cout << x << ' ' << y << '\n';
         if (x < 0 || y < 0 || x >= 10 || y >= 5)
-            throw InvalidPosition("Tile position (" + std::to_string(x) + ", " + std::to_string(y) + ") is invalid !");
+            throw InvalidPosition("Tile position (" + std::to_string(x) + ", " + std::to_string(y) + ") is invalid !\n");
         if (!grid[y][x]) {
             tilePos.x = static_cast<float>(x) * 150.f + 55.f;
             tilePos.y = static_cast<float>(y) * 150.f + 175.f;
@@ -62,15 +62,23 @@ void Button<T>::place(sf::Vector2f &mousePosition, std::vector<std::shared_ptr<C
             entity->setPosition(tilePos);
             cats.emplace_back(std::move(entity));
             grid[y][x] = true;
+            deleteEntity();
         }
-
-        dragging = false;
-        entity.reset();
+        else {
+            deleteEntity();
+            throw OccupiedPosition("Tile position (" + std::to_string(y) + ", " + std::to_string(x) + ") is occupied!\n");
+        }
 }
 
 template<typename T>
 bool Button<T>::isDragging() {
     return dragging;
+}
+
+template<typename T>
+void Button<T>::deleteEntity() {
+    dragging = false;
+    entity.reset();
 }
 
 template class Button<ShooterCat>;

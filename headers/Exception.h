@@ -29,4 +29,9 @@ public:
     explicit InvalidPosition(const std::string& err);
 };
 
+class OccupiedPosition : public GeneralException {
+public:
+    explicit OccupiedPosition(const std::string& err);
+};
+
 #endif //OOP_EXCEPTION_H

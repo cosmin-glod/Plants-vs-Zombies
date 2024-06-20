@@ -10,8 +10,8 @@ sf::Vector2f Game::mousePosView = sf::Vector2f();
 bool Game::isMousePressed = false;
 
 float Game::spawnOnceSeconds = 15.f;
-int Game::numberOfDificultyStages = 3;
-float Game::nextDificultyStage = 46.f;
+int Game::currentDificulty = 1;
+float Game::nextDificultyStage = 100.f;
 
 int Game::resources = 100;
 int Game::score = 0;
@@ -22,7 +22,7 @@ sf::RenderWindow Game::window = sf::RenderWindow(sf::VideoMode(1500, 850), "Cats
 Game::Game() :
     shooterCatButton{Button<ShooterCat>(TextureManager::getTexture("textures/cat-icons/shooter-cat-icon.png"), sf::Vector2f (5.f, 5.f), 100)},
     generatorCatButton{Button<GeneratorCat>(TextureManager::getTexture("textures/cat-icons/generator-cat-icon.png"), sf::Vector2f (205.f, 5.f), 50)},
-    wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f), 150)},
+    wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f), 250)},
 
     grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
@@ -49,7 +49,7 @@ Game::Game() :
 
     /// construire box-uri pt scor si altele
     resourcesBox.setter(TextureManager::getTexture("textures/info-bar/resourcesBox.png"), sf::Vector2f (600.f, 0.f));
-    enemyCountBox.setter(TextureManager::getTexture("textures/info-bar/enemyCountBox.png"), sf::Vector2f (900.f, 0.f));
+    dificultyBox.setter(TextureManager::getTexture("textures/info-bar/dificultyBox.png"), sf::Vector2f (900.f, 0.f));
     scoreBox.setter(TextureManager::getTexture("textures/info-bar/scoreBox.png"), sf::Vector2f (1200.f, 0.f));
     /// construire text
     if (!font.loadFromFile("./fonts/yoster.ttf")) {
@@ -62,8 +62,8 @@ Game::Game() :
     resourcesText.setFont(font);
     resourcesText.setPosition(sf::Vector2f (630.f, 30.f));
 
-    enemyCountText.setFont(font);
-    enemyCountText.setPosition(sf::Vector2f (925.f, 30.f));
+    dificultyText.setFont(font);
+    dificultyText.setPosition(sf::Vector2f (925.f, 30.f));
 
 //    spawnEnemy();
 }
@@ -71,20 +71,21 @@ void Game::update() {
 
     stageTime = stageTimer.getElapsedTime();
     if (stageTime >= sf::seconds(nextDificultyStage)) {
-        numberOfDificultyStages--;
-        switch (numberOfDificultyStages) {
+        currentDificulty++;
+        if (currentDificulty == 5)
+            currentDificulty = 2;
+        switch (currentDificulty) {
             case 2:
                 spawnOnceSeconds = 2.f;
                 nextDificultyStage += 30.f;
                 break;
-            case 1:
-                spawnOnceSeconds = 0.5f;
+            case 3:
+                spawnOnceSeconds = 1.f;
                 nextDificultyStage += 100.f;
                 break;
-            case 0:
-                spawnOnceSeconds = 0.05f;
+            case 4:
+                spawnOnceSeconds = 0.5f;
                 nextDificultyStage += 20.f;
-                numberOfDificultyStages = 3;
                 break;
             default:
                 break;
@@ -107,7 +108,7 @@ void Game::update() {
 
     /// Each cat does its thing
     for (auto &cat : cats) {
-        if (std::dynamic_pointer_cast<ShooterCat>(cat) || std::dynamic_pointer_cast<GeneratorCat>(cat))
+        if (!std::dynamic_pointer_cast<WallCat>(cat))
             cat->run();
     }
 //    for (auto &cat : cats)
@@ -121,7 +122,7 @@ void Game::update() {
     /// Update Score
     scoreText.setString("Score: " + std::to_string(score) + "\nHigh Score: " + std::to_string(highScore));
     resourcesText.setString("Whiskas: " + std::to_string(resources));
-    enemyCountText.setString("Dificulty : " + std::to_string(4 - numberOfDificultyStages));
+    dificultyText.setString("Dificulty : " + std::to_string(currentDificulty));
 
     ShooterCat::checkProjectilesCollisions(enemies);
 
@@ -138,6 +139,10 @@ void Game::update() {
 //                std::cout << cats[i]->getHealth() << '\n';
                 enemy.cannotMoveAnymore();
                 if (!cats[j]->isAlive()) {
+                    int x = static_cast<int>(cats[j]->getX()) / 150;
+                    int y = static_cast<int>(cats[j]->getY() - 100.f) / 150;
+//                    std::cout << cats[j]->getY() << ' ' << cats[j]->getX() << '\n';
+                    grid[y][x] = false;
                     cats.erase(cats.begin() + j);
                     --j;
                 }
@@ -166,7 +171,7 @@ void Game::render() {
     wallCatButton.draw(window, sf::RenderStates::Default);
 
     resourcesBox.draw(window, sf::RenderStates::Default);
-    enemyCountBox.draw(window, sf::RenderStates::Default);
+    dificultyBox.draw(window, sf::RenderStates::Default);
     scoreBox.draw(window, sf::RenderStates::Default);
 
     /// Render cats
@@ -183,7 +188,7 @@ void Game::render() {
     /// Render text
     window.draw(scoreText);
     window.draw(resourcesText);
-    window.draw(enemyCountText);
+    window.draw(dificultyText);
 
     /// Render new instance of a cat
     if (Button<ShooterCat>::isDragging())
@@ -222,12 +227,7 @@ void Game::handleEvents() {
             case sf::Event::MouseButtonReleased:
                 if (ev.mouseButton.button == sf::Mouse::Left) {
                     isMousePressed = false;
-                    try {
-                        handleButtonRelease();
-                    }
-                    catch (InvalidPosition&) {
-                        std::cout << "The cat wasn't placed !";
-                    }
+                    handleButtonRelease();
                 }
                 break;
             default:
@@ -255,14 +255,23 @@ void Game::spawnEnemy() {
     static std::mt19937 gen(rd());
 
     // Randomly generate a line between 0 and 4
-    std::uniform_int_distribution<> dis(0, 4);
-    int randomLine = dis(gen);
+    std::uniform_int_distribution<> lineDis(0, 4);
+    int randomLine = lineDis(gen);
 
-    // Create and initialize the enemy with the random line
-    Enemy enemy(TextureManager::getTexture("textures/box.png") ,randomLine, 1.f);
-    // Add the enemy to your collection or perform further actions
-    // For example, you might have a vector of enemies
-    enemies.push_back(enemy);
+    // Define the probabilities
+    std::uniform_real_distribution<> probDis(0.0, 1.0);
+    double probability = probDis(gen);
+
+    if (probability < 0.6) {
+        Enemy enemy = EnemyFactory::EasyEnemy(randomLine);
+        enemies.push_back(enemy);
+    } else if (probability < 0.9) {
+        Enemy enemy = EnemyFactory::MediumEnemy(randomLine);
+        enemies.push_back(enemy);
+    } else {
+        Enemy enemy = EnemyFactory::HardEnemy(randomLine);
+        enemies.push_back(enemy);
+    }
 }
 
 void Game::updateMousePosition() {
@@ -281,34 +290,48 @@ void Game::handleDragAndDrop() {
 
     else { /// poate apasa butonul pentru a instantia o entitate
         if (mousePosView.y <= 100.f) { /// trebuie sa fie apasat sus
-            if (mousePosView.x <= 200.f && resources >= 100) { /// shooter cat
-                Button<ShooterCat>::instantiate(mousePosView);
+            if (mousePosView.x <= 200.f) {/// shooter cat
+                if (resources >= 100)
+                    Button<ShooterCat>::instantiate(mousePosView);
             }
-            else if (mousePosView.x <= 400.f && resources >= 50) { /// generator cat
-                Button<GeneratorCat>::instantiate(mousePosView);
+            else if (mousePosView.x <= 400.f) {
+                if (resources >= 50) /// generator cat
+                    Button<GeneratorCat>::instantiate(mousePosView);
             }
-            else if (mousePosView.x <= 600.f && resources >= 150) { /// wall cat
-                Button<WallCat>::instantiate(mousePosView);
+            else if (mousePosView.x <= 600.f) {
+                if (resources >= 150) /// wall cat
+                    Button<WallCat>::instantiate(mousePosView);
             }
         }
     }
 }
 
 void Game::handleButtonRelease() {
-    if (mousePosView.y > 100) {
-        if (Button<ShooterCat>::isDragging()) {
-            Button<ShooterCat>::place(mousePosView, cats, grid);
-            decreaseResources(100);
-        } else if (Button<GeneratorCat>::isDragging()) {
-            Button<GeneratorCat>::place(mousePosView, cats, grid);
-            decreaseResources(50);
-        } else if (Button<WallCat>::isDragging()) {
-            Button<WallCat>::place(mousePosView, cats, grid);
-            decreaseResources(150);
-        }
+    try {
+        if (mousePosView.y > 100) {
+            if (Button<ShooterCat>::isDragging()) {
+                Button<ShooterCat>::place(mousePosView, cats, grid);
+                decreaseResources(100);
+            } else if (Button<GeneratorCat>::isDragging()) {
+                Button<GeneratorCat>::place(mousePosView, cats, grid);
+                decreaseResources(50);
+            } else if (Button<WallCat>::isDragging()) {
+                Button<WallCat>::place(mousePosView, cats, grid);
+                decreaseResources(150);
+            }
+        } else
+            throw InvalidPosition("Pozitie invalida!");
     }
-    else
-        throw InvalidPosition("Pozitie invalida!");
+    catch (InvalidPosition&) {
+            Button<GeneratorCat>::deleteEntity();
+            Button<ShooterCat>::deleteEntity();
+            Button<WallCat>::deleteEntity();
+
+            std::cout << "The cat wasn't placed !";
+    }
+    catch (OccupiedPosition &) {
+        std::cout << "There is no place here for this cat! Sorry.\n";
+    }
 }
 
 void Game::updateHighScore(std::ostream& fout) {

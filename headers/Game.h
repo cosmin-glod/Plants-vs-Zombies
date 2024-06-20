@@ -33,21 +33,21 @@ class Game {
     Button<WallCat> wallCatButton;
 
     Drawable resourcesBox;
-    Drawable enemyCountBox;
+    Drawable dificultyBox;
     Drawable scoreBox;
 
     sf::Font font;
 
     sf::Text scoreText;
     sf::Text resourcesText;
-    sf::Text enemyCountText;
+    sf::Text dificultyText;
 
     std::vector<std::vector<bool>> grid;
 
     sf::Clock spawnTimer;
 
     static float spawnOnceSeconds;
-    static int numberOfDificultyStages;
+    static int currentDificulty;
     sf::Time stageTime;
     sf::Clock stageTimer;
     static float nextDificultyStage;

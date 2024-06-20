@@ -39,3 +39,7 @@ void Enemy::nowCanMove() {
     canMove = true;
 }
 
+Enemy::Enemy(sf::Texture &t, int l, float h, float s) : line{l}, hp{h}, speed{s} {
+    sprite.setTexture(t);
+    sprite.setPosition(1450.f, 110.f + float(line) * 150.f);
+}

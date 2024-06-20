@@ -11,7 +11,7 @@
 
 class ShooterCat : public Cat {
 private:
-    float projectilesOnceEverySeconds{1.5f};
+    float projectilesOnceEverySeconds{2.f};
     sf::Clock fireClock;
     static std::vector<Projectile> projectiles;
 public:

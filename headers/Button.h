@@ -27,6 +27,7 @@ public:
     static void instantiate(sf::Vector2f&);
     static bool isDragging();
     static void displayEntity(sf::RenderTarget&, sf::RenderStates);
+    static void deleteEntity();
 };
 
 
