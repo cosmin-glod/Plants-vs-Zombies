@@ -14,7 +14,7 @@
 
 template<typename T>
 class Button : public Drawable{
-    static std::unique_ptr<Cat> entity;
+    static std::unique_ptr<T> entity;
     [[maybe_unused]] static bool dragging;
     sf::Font font;
     static int cost;

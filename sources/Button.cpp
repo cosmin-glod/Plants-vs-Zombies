@@ -5,7 +5,7 @@
 #include "../headers/Button.h"
 
 template<typename T>
-std::unique_ptr<Cat> Button<T>::entity = nullptr;
+std::unique_ptr<T> Button<T>::entity = nullptr;
 
 template<> int Button<ShooterCat>::cost = 100;
 template<> int Button<GeneratorCat>::cost = 50;
