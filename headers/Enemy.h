@@ -19,7 +19,7 @@ protected:
     bool canMove{true};
 public:
     /// Constructori / Destructori
-    explicit Enemy(sf::Texture&, int, float);
+//    explicit Enemy(sf::Texture&, int, float);
     Enemy(sf::Texture&, int, float, float);
 
     void move();

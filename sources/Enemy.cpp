@@ -6,12 +6,6 @@
 #include "../headers/Game.h"
 
 
-Enemy::Enemy(sf::Texture& texture, int l, float speed_) : line{l}, speed{speed_}{
-
-    sprite.setTexture(texture);
-    sprite.setPosition(1450.f, 110.f + float(line) * 150.f);
-}
-
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) {
     // Draw the body onto the target
     target.draw(sprite, states);

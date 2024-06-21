@@ -20,11 +20,11 @@ int Game::highScore = 0;
 sf::RenderWindow Game::window = sf::RenderWindow(sf::VideoMode(1500, 850), "Cats vs. Boxes", sf::Style::Titlebar | sf::Style::Close);
 
 Game::Game() :
-    shooterCatButton{Button<ShooterCat>(TextureManager::getTexture("textures/cat-icons/shooter-cat-icon.png"), sf::Vector2f (5.f, 5.f), 100)},
-    generatorCatButton{Button<GeneratorCat>(TextureManager::getTexture("textures/cat-icons/generator-cat-icon.png"), sf::Vector2f (205.f, 5.f), 50)},
-    wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f), 250)},
-
-    grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
+    shooterCatButton{Button<ShooterCat>(TextureManager::getTexture("textures/cat-icons/shooter-cat-icon.png"), sf::Vector2f (5.f, 5.f))},
+    generatorCatButton{Button<GeneratorCat>(TextureManager::getTexture("textures/cat-icons/generator-cat-icon.png"), sf::Vector2f (205.f, 5.f))},
+    wallCatButton{Button<WallCat>(TextureManager::getTexture("textures/cat-icons/wall-cat-icon.png"), sf::Vector2f (405.f, 5.f))},
+    cats{5, 10}
+//    grid{std::vector<std::vector<bool>>(5, std::vector<bool>(10, false))}
     {
 
     /// Initializare tiles
@@ -107,10 +107,11 @@ void Game::update() {
     }
 
     /// Each cat does its thing
-    for (auto &cat : cats) {
-        if (!std::dynamic_pointer_cast<WallCat>(cat))
-            cat->run();
-    }
+//    for (auto &cat : cats) {
+//        if (!std::dynamic_pointer_cast<WallCat>(cat))
+//            cat->run();
+//    }
+    cats.run();
 //    for (auto &cat : cats)
 //        cat->run();
 
@@ -129,26 +130,27 @@ void Game::update() {
     for (auto &enemy : enemies) {
         enemy.nowCanMove();
     }
-
+    cats.enemyCollision(enemies);
     /// Cat - Enemy Collision
-    for (auto &enemy : enemies) {
-        for (unsigned j = 0; j < cats.size(); ++j) {
-            if (enemy.getSprite().getGlobalBounds().intersects(cats[j]->getSprite().getGlobalBounds())) {
-//                std::cout << "am intrat\n";
-                cats[j]->gotHit();
-//                std::cout << cats[i]->getHealth() << '\n';
-                enemy.cannotMoveAnymore();
-                if (!cats[j]->isAlive()) {
-                    int x = static_cast<int>(cats[j]->getX()) / 150;
-                    int y = static_cast<int>(cats[j]->getY() - 100.f) / 150;
-//                    std::cout << cats[j]->getY() << ' ' << cats[j]->getX() << '\n';
-                    grid[y][x] = false;
-                    cats.erase(cats.begin() + j);
-                    --j;
-                }
-            }
-        }
-    }
+//
+//    for (auto &enemy : enemies) {
+//        for (unsigned j = 0; j < cats.size(); ++j) {
+//            if (enemy.getSprite().getGlobalBounds().intersects(cats[j]->getSprite().getGlobalBounds())) {
+////                std::cout << "am intrat\n";
+//                cats[j]->gotHit();
+////                std::cout << cats[i]->getHealth() << '\n';
+//                enemy.cannotMoveAnymore();
+//                if (!cats[j]->isAlive()) {
+//                    int x = static_cast<int>(cats[j]->getX()) / 150;
+//                    int y = static_cast<int>(cats[j]->getY() - 100.f) / 150;
+////                    std::cout << cats[j]->getY() << ' ' << cats[j]->getX() << '\n';
+//                    grid[y][x] = false;
+//                    cats.erase(cats.begin() + j);
+//                    --j;
+//                }
+//            }
+//        }
+//    }
 
     /// Drag and drop
     if (isMousePressed)
@@ -175,9 +177,10 @@ void Game::render() {
     scoreBox.draw(window, sf::RenderStates::Default);
 
     /// Render cats
-    for (auto &cat : cats) {
-        cat->draw(window, sf::RenderStates::Default);
-    }
+    cats.draw(window, sf::RenderStates::Default);
+//    for (auto &cat : cats) {
+//        cat->draw(window, sf::RenderStates::Default);
+//    }
 
     /// Render projectiles
     ShooterCat::displayProjectiles(window, sf::RenderStates::Default);
@@ -288,18 +291,18 @@ void Game::handleDragAndDrop() {
     else if (Button<WallCat>::isDragging())
         Button<WallCat>::drag(mousePosView);
 
-    else { /// poate apasa butonul pentru a instantia o entitate
-        if (mousePosView.y <= 100.f) { /// trebuie sa fie apasat sus
-            if (mousePosView.x <= 200.f) {/// shooter cat
-                if (resources >= 100)
+    else {  /// poate apasa butonul pentru a instantia o entitate
+        if (mousePosView.y <= 100.f) {  /// trebuie sa fie apasat sus
+            if (mousePosView.x <= 200.f) {  /// shooter cat
+                if (resources >= Button<ShooterCat>::getCost())
                     Button<ShooterCat>::instantiate(mousePosView);
             }
             else if (mousePosView.x <= 400.f) {
-                if (resources >= 50) /// generator cat
+                if (resources >= Button<GeneratorCat>::getCost()) /// generator cat
                     Button<GeneratorCat>::instantiate(mousePosView);
             }
             else if (mousePosView.x <= 600.f) {
-                if (resources >= 150) /// wall cat
+                if (resources >= Button<WallCat>::getCost()) /// wall cat
                     Button<WallCat>::instantiate(mousePosView);
             }
         }
@@ -310,14 +313,14 @@ void Game::handleButtonRelease() {
     try {
         if (mousePosView.y > 100) {
             if (Button<ShooterCat>::isDragging()) {
-                Button<ShooterCat>::place(mousePosView, cats, grid);
-                decreaseResources(100);
+                Button<ShooterCat>::place(mousePosView, cats);
+                decreaseResources(Button<ShooterCat>::getCost());
             } else if (Button<GeneratorCat>::isDragging()) {
-                Button<GeneratorCat>::place(mousePosView, cats, grid);
-                decreaseResources(50);
+                Button<GeneratorCat>::place(mousePosView, cats);
+                decreaseResources(Button<GeneratorCat>::getCost());
             } else if (Button<WallCat>::isDragging()) {
-                Button<WallCat>::place(mousePosView, cats, grid);
-                decreaseResources(150);
+                Button<WallCat>::place(mousePosView, cats);
+                decreaseResources(Button<WallCat>::getCost());
             }
         } else
             throw InvalidPosition("Pozitie invalida!");
@@ -330,6 +333,10 @@ void Game::handleButtonRelease() {
             std::cout << "The cat wasn't placed !";
     }
     catch (OccupiedPosition &) {
+        Button<GeneratorCat>::deleteEntity();
+        Button<ShooterCat>::deleteEntity();
+        Button<WallCat>::deleteEntity();
+
         std::cout << "There is no place here for this cat! Sorry.\n";
     }
 }

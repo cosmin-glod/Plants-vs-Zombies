@@ -16,6 +16,7 @@
 #include "Button.h"
 #include "TextureManager.h"
 #include "Exception.h"
+#include "ObjectPool.h"
 
 class Game {
     static sf::RenderWindow window;
@@ -26,11 +27,13 @@ class Game {
 
     std::vector<sf::Sprite> background_tiles;
     std::vector<Enemy> enemies;
-    std::vector<std::shared_ptr<Cat>> cats;
+//    std::vector<std::shared_ptr<Cat>> cats;
 
     Button<ShooterCat> shooterCatButton;
     Button<GeneratorCat> generatorCatButton;
     Button<WallCat> wallCatButton;
+
+    ObjectPool cats;
 
     Drawable resourcesBox;
     Drawable dificultyBox;
@@ -42,7 +45,7 @@ class Game {
     sf::Text resourcesText;
     sf::Text dificultyText;
 
-    std::vector<std::vector<bool>> grid;
+//    std::vector<std::vector<bool>> grid;
 
     sf::Clock spawnTimer;
 
@@ -71,7 +74,7 @@ public:
 
     /// Spawners
     void spawnEnemy();
-    static void handleDragAndDrop();
+    void handleDragAndDrop();
     void handleButtonRelease();
 
     void handleEvents();

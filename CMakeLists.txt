@@ -158,6 +158,8 @@ add_executable(${PROJECT_NAME}
         sources/TextureManager.cpp
         headers/Exception.h
         sources/Exception.cpp
+        headers/ObjectPool.h
+        sources/ObjectPool.cpp
 )
 
 ###############################################################################
