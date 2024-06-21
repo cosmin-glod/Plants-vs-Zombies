@@ -89,5 +89,17 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
 
 ## Resurse
 
+- whiskas : https://catdogshop.cl/producto/whiskas-adulto-pollo-1-kg/
+- projectile : https://clipart-library.com/clipart/583502.htm
+- fragile box : https://box-printing.co.uk/fragile-boxes
+- normal box : https://www.amazon.ca/Boxes-Fast-BF121236-Cardboard-Corrugated/dp/B077BSG1VN
+- heavy box : https://www.gostore.co.uk/product/boxes-packaging/large-packing-box/
+- wall cat : https://www.pinterest.com.mx/pin/344877283950240286/
+- shooter cat : https://www.amazon.com/Kalashnikat-Funny-Sticker-Decal-Bumper/dp/B08NG1B41Q
+- generator cat : https://www.youtube.com/channel/UC49eIaJNhhBrvEjPDBJQUCA
+
+Font : https://fontsforyou.com/en/fonts/66398-yoster.font
+
+
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
 - adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit
