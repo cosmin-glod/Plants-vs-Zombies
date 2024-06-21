@@ -28,14 +28,6 @@ void Cat::gotHit() {
 
 Cat::Cat(sf::Vector2f position, int health_) : Drawable(position), health{health_} {}
 
-float Cat::getX() const {
-    return sprite.getPosition().x;
-}
-
-float Cat::getY() const {
-    return sprite.getPosition().y;
-}
-
 //int Cat::getCost() const {
 //    return cost;
 //}

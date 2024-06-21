@@ -23,9 +23,6 @@ public:
     bool isAlive() const;
     void gotHit();
 
-    float getX() const;
-    float getY() const;
-
 //    [[maybe_unused]] int getHealth() const;
 };
 
