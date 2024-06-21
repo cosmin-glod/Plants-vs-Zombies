@@ -31,7 +31,7 @@ public:
     void nowCanMove();
 };
 
-class EnemyFactory : public Enemy {
+class EnemyFactory {
 public:
     static Enemy EasyEnemy(int l) { return Enemy(TextureManager::getTexture("textures/box1.png"), l, 9.f, 0.5f); }
     static Enemy MediumEnemy(int l) { return Enemy(TextureManager::getTexture("textures/box2.png"), l, 12.f, 0.3f); }
